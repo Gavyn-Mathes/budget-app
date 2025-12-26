@@ -1,0 +1,28 @@
+{
+  "name": "budget-app",
+  "version": "1.0.0",
+  "description": "A Budget App Project for personal budget tracking.",
+  "main": "out/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gavyn Mathes",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "electron": "^39.2.7",
+    "electron-vite": "^5.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.0"
+  },
+  "dependencies": {
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
+  }
+}
