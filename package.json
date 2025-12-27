@@ -13,6 +13,7 @@
   "author": "Gavyn Mathes",
   "license": "MIT",
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.2",
@@ -22,6 +23,7 @@
     "vite": "^7.3.0"
   },
   "dependencies": {
+    "better-sqlite3": "^12.5.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
   }
