@@ -4,7 +4,7 @@ import type { FundEntry } from "../../../../shared/domain/fund"
 import { toMonthKey } from "../../../../shared/utils/dates"
 import { fundEntryToRow } from "./entries.mapper"
 
-export function insertFundEntry(input: Omit<FundEntry, "id">): FundEntry {
+export function createFundEntry(input: Omit<FundEntry, "id">): FundEntry {
   const db = getDb()
   const nowIso = new Date().toISOString()
 

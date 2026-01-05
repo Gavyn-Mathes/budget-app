@@ -30,11 +30,11 @@ function rowToCategory(r: CategoryRow): Category {
  * - name must be unique (SQLite UNIQUE constraint).
  * - trims whitespace; rejects empty strings.
  */
-export function createCategory(input: { name: string }): Category {
+export function createCategory(input: string): Category {
   const db = getDb()
   const now = new Date().toISOString()
 
-  const name = input.name.trim()
+  const name = input.trim()
   if (!name) throw new Error("category name cannot be empty")
 
   const row: CategoryRow = {

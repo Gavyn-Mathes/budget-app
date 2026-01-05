@@ -45,3 +45,9 @@ export function deleteFund(fundId: string): boolean {
   const res = db.prepare(`DELETE FROM funds WHERE id = ?`).run(fundId)
   return res.changes > 0
 }
+
+export function listFunds() {
+  const db = getDb()
+
+  const rows = db.prepare(`SELECT * FROM fund_entries`)
+}

@@ -274,3 +274,57 @@ export function getBudgetPlan(monthKey: string): BudgetPlan | null {
     surplusDistribution: rowsToRules(surplusRows),
   }
 }
+
+export function deleteBudgetPlan(monthKey: string): BudgetPlan | null {
+  const db = getDb();
+
+  const tx = db.transaction((mk: string): BudgetPlan | null => {
+    const planRow = db.prepare(`
+      SELECT id, month_key, currency, income, cap, created_at, updated_at
+      FROM budget_plans
+      WHERE month_key = ?
+    `).get(mk) as BudgetPlanRow | undefined;
+
+    if (!planRow) return null;
+
+    const planId = planRow.id;
+
+    const sliceRows = db.prepare(`
+      SELECT id, category_id, mode, fixed, percent, base, amount
+      FROM budget_expense_slices
+      WHERE budget_plan_id = ?
+      ORDER BY category_id ASC
+    `).all(planId) as SliceRow[];
+
+    const expenseSlices = sliceRows.map(rowToSlice);
+
+    const distRows = db.prepare(`
+      SELECT id, fund_id, percentage
+      FROM budget_distributions
+      WHERE budget_plan_id = ? AND distribution_type = ?
+      ORDER BY fund_id ASC
+    `);
+
+    const remainderRows = distRows.all(planId, "REMAINDER" satisfies DistType) as BudgetDistributionRow[];
+    const surplusRows   = distRows.all(planId, "SURPLUS"   satisfies DistType) as BudgetDistributionRow[];
+
+    // One delete; cascades handle slices + distributions
+    const res = db.prepare(`DELETE FROM budget_plans WHERE id = ?`).run(planId);
+    if (res.changes !== 1) {
+      throw new Error(`Failed to delete budget plan for month_key=${mk}`);
+    }
+
+    return {
+      id: planRow.id,
+      monthKey: planRow.month_key,
+      currency: planRow.currency,
+      income: planRow.income,
+      cap: planRow.cap,
+      expenseSlices,
+      remainderDistribution: rowsToRules(remainderRows),
+      surplusDistribution: rowsToRules(surplusRows),
+    };
+  });
+
+  return tx(monthKey);
+}
