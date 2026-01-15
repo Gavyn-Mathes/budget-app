@@ -46,8 +46,16 @@ export function deleteFund(fundId: string): boolean {
   return res.changes > 0
 }
 
-export function listFunds() {
+export function listFunds(): Fund[] {
   const db = getDb()
 
-  const rows = db.prepare(`SELECT * FROM fund_entries`)
+  const rows = db
+    .prepare(
+      `SELECT id, key, name, currency, updated_at as updatedAt
+       FROM funds
+       ORDER BY name`
+    )
+    .all()
+
+  return (rows ?? []) as Fund[]
 }

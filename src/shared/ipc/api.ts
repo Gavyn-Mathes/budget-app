@@ -1,6 +1,6 @@
 // shared/ipc/api.ts
-import type { Fund, FundEntry, FundTransfer } from "../domain/fund/types"
-import type { BudgetPlan } from "../domain/budget/types"
+
+import { listFundEntries } from "../../main/db/repos/fund";
 
 export const IPC = {
   // categories
@@ -16,10 +16,12 @@ export const IPC = {
   // fund entries
   createFundEntry: "fundEntries:create",
   deleteFundEntry: "fundEntries:delete",
+  listFundEntries: "fundEntries:list",
 
   // transfers
   createFundTransfer: "fundTransfers:create",
   deleteFundTransfer: "fundTransfers:delete",
+  listFundTransfers: "fundTransfers:list",
 
   // budgets
   createBudgetPlan: "budgetPlans:create",
@@ -29,9 +31,13 @@ export const IPC = {
 } as const
 
 export type Category = { id: string; name: string; createdAt: string; updatedAt: string }
+export type Fund = import("../domain/fund/types").Fund
+export type FundEntry = import("../domain/fund/types").FundEntry
+export type FundTransfer = import("../domain/fund/types").FundTransfer
+export type BudgetPlan = import("../domain/budget/types").BudgetPlan
 
 // Inputs (avoid sending derived fields from renderer)
-export type CreateFundInput = Omit<Fund, "id" | "balance" | "updatedAt"> & { currency?: "USD" }
+export type CreateFundInput = Pick<Fund, "key" | "name"> & { currency?: "USD" }
 export type CreateFundEntryInput = Omit<FundEntry, "id">
 export type CreateFundTransferInput = Omit<FundTransfer, "id" | "fromEntryId" | "toEntryId">
 export type CreateBudgetPlanInput = Omit<BudgetPlan, "id">
@@ -50,14 +56,16 @@ export type Api = {
   // entries
   createFundEntry(input: CreateFundEntryInput): Promise<FundEntry>
   deleteFundEntry(entryId: string): Promise<void>
+  listFundEntries(fundId?: string): Promise<FundEntry[]>
 
   // transfers
   createFundTransfer(input: CreateFundTransferInput): Promise<FundTransfer>
   deleteFundTransfer(transferId: string): Promise<void>
+  listFundTransfers(fromFundId?: string, toFundId?: string): Promise<FundTransfer[]>
 
   // budgets
   createBudgetPlan(input: CreateBudgetPlanInput): Promise<BudgetPlan>
   saveBudgetPlan(plan: BudgetPlan): Promise<BudgetPlan>
   getBudgetPlan(monthKey: string): Promise<BudgetPlan | null>
-  deleteBudgetPlan(planId: string): Promise<void>
+  deleteBudgetPlan(monthKey: string): Promise<void>
 }

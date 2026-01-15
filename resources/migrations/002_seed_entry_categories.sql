@@ -20,5 +20,5 @@ VALUES
   ('cat_gas',       'Gas',       datetime('now'), datetime('now')),
   ('cat_utilities', 'Utilities', datetime('now'), datetime('now')),
   ('cat_stocks',    'Stocks',    datetime('now'), datetime('now')),
-  ('cat_bonds',     'Bonds',     datetime('now'), datetime('now'));
+  ('cat_bonds',     'Bonds',     datetime('now'), datetime('now')),
   ('cat_transfer',  'Transfers',     datetime('now'), datetime('now'));

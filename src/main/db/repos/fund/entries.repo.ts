@@ -33,3 +33,40 @@ export function deleteFundEntry(entryId: string): boolean {
   const res = db.prepare(`DELETE FROM fund_entries WHERE id = ?`).run(entryId)
   return res.changes > 0
 }
+
+export function listFundEntries(fundId?: string): FundEntry[] {
+  const db = getDb()
+
+  if (fundId) {
+    const rows = db.prepare(
+      `SELECT id,
+              fund_id as fundId,
+              date,
+              amount,
+              kind,
+              category_id as categoryId,
+              tax_treatment as taxTreatment,
+              memo
+       FROM fund_entries
+       WHERE fund_id = ?
+       ORDER BY date DESC`
+    ).all(fundId)
+
+    return (rows ?? []) as FundEntry[]
+  }
+
+  const rows = db.prepare(
+    `SELECT id,
+            fund_id as fundId,
+            date,
+            amount,
+            kind,
+            category_id as categoryId,
+            tax_treatment as taxTreatment,
+            memo
+     FROM fund_entries
+     ORDER BY date DESC`
+  ).all()
+
+  return (rows ?? []) as FundEntry[]
+}

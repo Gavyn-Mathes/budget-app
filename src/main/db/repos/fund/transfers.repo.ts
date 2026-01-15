@@ -82,3 +82,78 @@ export function deleteFundTransfer(transferId: string): boolean {
   const res = db.prepare(`DELETE FROM fund_transfers WHERE id = ?`).run(transferId)
   return res.changes > 0
 }
+
+export function listFundTransfers(fromFundId?: string, toFundId?: string): FundTransfer[] {
+  const db = getDb()
+
+  // If both provided: show between the two in either direction
+  if (fromFundId && toFundId) {
+    const rows = db.prepare(`
+      SELECT
+        id,
+        from_fund_id as fromFundId,
+        to_fund_id as toFundId,
+        date,
+        amount,
+        memo
+      FROM fund_transfers
+      WHERE
+        (from_fund_id = ? AND to_fund_id = ?)
+        OR
+        (from_fund_id = ? AND to_fund_id = ?)
+      ORDER BY date DESC
+    `).all(fromFundId, toFundId, toFundId, fromFundId)
+
+    return (rows ?? []) as FundTransfer[]
+  }
+
+  // If only one side provided, filter that side
+  if (fromFundId) {
+    const rows = db.prepare(`
+      SELECT
+        id,
+        from_fund_id as fromFundId,
+        to_fund_id as toFundId,
+        date,
+        amount,
+        memo
+      FROM fund_transfers
+      WHERE from_fund_id = ?
+      ORDER BY date DESC
+    `).all(fromFundId)
+
+    return (rows ?? []) as FundTransfer[]
+  }
+
+  if (toFundId) {
+    const rows = db.prepare(`
+      SELECT
+        id,
+        from_fund_id as fromFundId,
+        to_fund_id as toFundId,
+        date,
+        amount,
+        memo
+      FROM fund_transfers
+      WHERE to_fund_id = ?
+      ORDER BY date DESC
+    `).all(toFundId)
+
+    return (rows ?? []) as FundTransfer[]
+  }
+
+  // No filters: all transfers
+  const rows = db.prepare(`
+    SELECT
+      id,
+      from_fund_id as fromFundId,
+      to_fund_id as toFundId,
+      date,
+      amount,
+      memo
+    FROM fund_transfers
+    ORDER BY date DESC
+  `).all()
+
+  return (rows ?? []) as FundTransfer[]
+}

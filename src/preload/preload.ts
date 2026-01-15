@@ -1,4 +1,4 @@
-// preload/index.ts
+// preload/preload.ts
 import { contextBridge, ipcRenderer } from "electron"
 import { IPC, type Api } from "../shared/ipc/api"
 
@@ -16,10 +16,12 @@ const api: Api = {
   // entries
   createFundEntry: (input) => ipcRenderer.invoke(IPC.createFundEntry, input),
   deleteFundEntry: (id) => ipcRenderer.invoke(IPC.deleteFundEntry, id),
+  listFundEntries: (fundId?) => ipcRenderer.invoke(IPC.listFundEntries, fundId),
 
   // transfers
   createFundTransfer: (input) => ipcRenderer.invoke(IPC.createFundTransfer, input),
   deleteFundTransfer: (id) => ipcRenderer.invoke(IPC.deleteFundTransfer, id),
+  listFundTransfers: (fromFundId?: string, toFundId?: string) => ipcRenderer.invoke(IPC.listFundTransfers, fromFundId, toFundId),
 
   // budgets
   createBudgetPlan: (input) => ipcRenderer.invoke(IPC.createBudgetPlan, input),

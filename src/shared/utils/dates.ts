@@ -1,3 +1,4 @@
+// src/shared/utils/dates.ts
 // Month name type derived from MONTH_NAMES ("January" | ... | "December")
 export type MonthName = (typeof MONTH_NAMES)[number]
 
