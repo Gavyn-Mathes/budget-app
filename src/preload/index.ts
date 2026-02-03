@@ -1,5 +1,2 @@
-//src/preload/index.ts
-
-export * from "./preload"
-
-export {}
+// src/preload/index.ts
+import "./preload";

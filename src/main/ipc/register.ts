@@ -1,32 +1,34 @@
-// main/ipc/register.ts
-// --- categories repo (you'll implement these) ---
-import { registerCategoryHandlers } from "./categories.ipc"
-
-// --- funds repo ---
-import { registerFundsHandlers } from "./funds.ipc"
-
-// --- fund entries repo ---
-import { registerFundEntriesHandlers } from "./entries.ipc"
-
-// --- transfers repo ---
-import { registerTransfersHandlers } from "./transfers.ipc"
-
-// --- budgets repo ---
-import { registerBudgetHandlers } from "./budgets.ipc"
+// src/main/ipc/register.ts
+import { registerAccountTypesIpc } from "./account_types.ipc";
+import { registerAccountsIpc } from "./accounts.ipc";
+import { registerAssetsIpc } from "./assets.ipc";
+import { registerBudgetsIpc } from "./budgets.ipc";
+import { registerBudgetLinesIpc } from "./budget_lines.ipc";
+import { registerCategoriesIpc } from "./categories.ipc";
+import { registerDistributionsIpc } from "./distributions.ipc";
+import { registerEventTypesIpc } from "./event_types.ipc";
+import { registerFundEventsIpc } from "./fund_events.ipc";
+import { registerFundEventLinesIpc } from "./fund_event_lines.ipc";
+import { registerFundsIpc } from "./funds.ipc";
+import { registerIncomesIpc } from "./incomes.ipc";
+import { registerLiabilitiesIpc } from "./liabilities.ipc";
+import { registerTransactionsIpc } from "./transactions.ipc";
 
 export function registerIpcHandlers() {
-  // categories
-  registerCategoryHandlers()
-
-  // funds
-  registerFundsHandlers()
-  
-  // entries
-  registerFundEntriesHandlers()
-
-  // transfers
-  registerTransfersHandlers()
-
-  // budgets
-  registerBudgetHandlers()
+  registerAccountTypesIpc();
+  registerAccountsIpc();
+  registerAssetsIpc();
+  registerBudgetsIpc();
+  registerBudgetLinesIpc();
+  registerCategoriesIpc();
+  registerDistributionsIpc();
+  registerEventTypesIpc();
+  registerFundEventsIpc();
+  registerFundEventLinesIpc();
+  registerFundsIpc();
+  registerIncomesIpc();
+  registerLiabilitiesIpc();
+  registerTransactionsIpc();
 }
+
+export default registerIpcHandlers;

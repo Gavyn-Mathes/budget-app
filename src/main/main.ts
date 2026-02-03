@@ -1,10 +1,9 @@
-// src/main/main.ts
-import { app, BrowserWindow } from "electron"
-import path from "path"
-import { initDb } from "./db"
-import { registerIpcHandlers } from "./ipc/register"
+import { app, BrowserWindow } from "electron";
+import path from "path";
+import { initDb } from "./db";
+import { registerIpcHandlers } from "./ipc/register"; // or "./ipc" depending on your file
 
-let win: BrowserWindow | null = null
+let win: BrowserWindow | null = null;
 
 function createWindow() {
   win = new BrowserWindow({
@@ -15,30 +14,45 @@ function createWindow() {
       contextIsolation: true,
       nodeIntegration: false,
     },
-  })
+  });
 
-  win.webContents.openDevTools({ mode: "detach" })
+  if (!app.isPackaged) {
+    win.webContents.openDevTools({ mode: "detach" });
+  }
+
+  win.on("closed", () => {
+    win = null;
+  });
 
   win.webContents.on("did-fail-load", (_e, code, desc, url) => {
-    console.error("did-fail-load:", { code, desc, url })
-  })
+    console.error("did-fail-load:", { code, desc, url });
+  });
 
   win.webContents.on("did-finish-load", () => {
-    console.log("did-finish-load:", win?.webContents.getURL())
-  })
+    console.log("did-finish-load:", win?.webContents.getURL());
+  });
 
-  const devUrl = process.env.VITE_DEV_SERVER_URL
-  console.log("VITE_DEV_SERVER_URL =", devUrl)
+  const devUrl = process.env.VITE_DEV_SERVER_URL;
+  console.log("VITE_DEV_SERVER_URL =", devUrl);
 
   if (devUrl) {
-    win.loadURL(devUrl)
+    win.loadURL(devUrl);
   } else {
-    win.loadFile(path.join(__dirname, "../renderer/index.html"))
+    win.loadFile(path.join(__dirname, "../renderer/index.html"));
   }
 }
 
 app.whenReady().then(() => {
-  initDb()
-  registerIpcHandlers()
-  createWindow()
-})
+  initDb();
+  registerIpcHandlers();
+  createWindow();
+
+  app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
+});
+
+app.on("window-all-closed", () => {
+  // On macOS, apps commonly stay open until user quits explicitly
+  if (process.platform !== "darwin") app.quit();
+});

@@ -1,5 +1,6 @@
 # ---- Budget app local runtime data ----
 data/
+budget-app-database.csv
 # (or if you prefer only the contents)
 # data/**
 
