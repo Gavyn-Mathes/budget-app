@@ -1,0 +1,20 @@
+/* renderer/src/styles/BudgetsHomePage.css */
+.budgetsHome {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+@media (max-width: 900px) {
+  .budgetsHome {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 520px) {
+  .budgetsHome {
+    padding: 14px;
+    gap: 14px;
+  }
+}

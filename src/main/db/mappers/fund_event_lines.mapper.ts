@@ -4,15 +4,18 @@ import type { FundEventLine } from "../../../shared/types/fund_event_line";
 export type DbFundEventLineRow = {
   line_id: string;
   event_id: string;
+  line_no: number;
 
   asset_id: string | null;
   liability_id: string | null;
 
-  quantity_delta: number | null;
-  balance_delta: number | null;
+  line_kind: "ASSET_QUANTITY" | "ASSET_MONEY" | "LIABILITY_MONEY";
 
-  unit_price: number | null;
-  fee: number | null;
+  quantity_delta_minor: number | null;
+  money_delta_minor: number | null;
+  fee_minor: number | null;
+
+  unit_price: string | null; // per your StoredBase: string|null
   notes: string | null;
 
   created_at: string;
@@ -23,40 +26,71 @@ export function mapFundEventLine(row: DbFundEventLineRow): FundEventLine {
   const base = {
     lineId: row.line_id,
     eventId: row.event_id,
-    unitPrice: row.unit_price as any, // Money branded number
-    fee: row.fee as any,              // Money branded number
+    lineNo: row.line_no,
+
+    unitPrice: row.unit_price, // string | null
+    fee: row.fee_minor,
     notes: row.notes,
+
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   } as const;
 
-  // Asset line
-  if (row.asset_id !== null) {
-    if (row.liability_id !== null || row.quantity_delta === null || row.balance_delta !== null) {
-      throw new Error(`Invalid asset fund_event_line for line_id=${row.line_id}`);
-    }
-    return {
-      ...base,
-      assetId: row.asset_id,
-      liabilityId: null,
-      quantityDelta: row.quantity_delta,
-      balanceDelta: null,
-    };
+  // sanity: exactly one target
+  const hasAsset = row.asset_id !== null;
+  const hasLiability = row.liability_id !== null;
+  if (hasAsset === hasLiability) {
+    throw new Error(
+      `Invalid fund_event_line: expected exactly one of asset_id/liability_id (line_id=${row.line_id})`
+    );
   }
 
-  // Liability line
-  if (row.liability_id !== null) {
-    if (row.asset_id !== null || row.balance_delta === null || row.quantity_delta !== null) {
-      throw new Error(`Invalid liability fund_event_line for line_id=${row.line_id}`);
+  switch (row.line_kind) {
+    case "ASSET_QUANTITY": {
+      if (!hasAsset || row.quantity_delta_minor === null || row.money_delta_minor !== null) {
+        throw new Error(`Invalid ASSET_QUANTITY fund_event_line (line_id=${row.line_id})`);
+      }
+      return {
+        ...base,
+        lineKind: "ASSET_QUANTITY",
+        assetId: row.asset_id!,
+        liabilityId: null,
+        quantityDeltaMinor: row.quantity_delta_minor,
+        moneyDelta: null,
+      };
     }
-    return {
-      ...base,
-      assetId: null,
-      liabilityId: row.liability_id,
-      quantityDelta: null,
-      balanceDelta: row.balance_delta as any, // Money branded number
-    };
-  }
 
-  throw new Error(`Invalid fund_event_line: neither asset_id nor liability_id set (line_id=${row.line_id})`);
+    case "ASSET_MONEY": {
+      if (!hasAsset || row.money_delta_minor === null || row.quantity_delta_minor !== null) {
+        throw new Error(`Invalid ASSET_MONEY fund_event_line (line_id=${row.line_id})`);
+      }
+      return {
+        ...base,
+        lineKind: "ASSET_MONEY",
+        assetId: row.asset_id!,
+        liabilityId: null,
+        quantityDeltaMinor: null,
+        moneyDelta: row.money_delta_minor,
+      };
+    }
+
+    case "LIABILITY_MONEY": {
+      if (!hasLiability || row.money_delta_minor === null || row.quantity_delta_minor !== null) {
+        throw new Error(`Invalid LIABILITY_MONEY fund_event_line (line_id=${row.line_id})`);
+      }
+      return {
+        ...base,
+        lineKind: "LIABILITY_MONEY",
+        assetId: null,
+        liabilityId: row.liability_id!,
+        quantityDeltaMinor: null,
+        moneyDelta: row.money_delta_minor,
+      };
+    }
+
+    default: {
+      const _exhaustive: never = row.line_kind;
+      throw new Error(`Unknown line_kind=${_exhaustive}`);
+    }
+  }
 }

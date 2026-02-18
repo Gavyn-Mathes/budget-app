@@ -1,20 +1,6 @@
 // shared/types/budget.ts
-import type { Id, MonthKey, Money, IsoTimestamp } from "./common";
+import type { BudgetDTO, BudgetUpsertInputDTO } from "../schemas/budget";
 
-export type BudgetId = Id;
-
-export interface Budget {
-  budgetId: BudgetId;
-
-  // Month this budget is for
-  budgetMonthKey: MonthKey;
-
-  // Month whose income baseline this budget uses
-  incomeMonthKey: MonthKey;
-
-  cap: Money;
-  notes: string | null;
-
-  createdAt: IsoTimestamp;
-  updatedAt: IsoTimestamp;
-}
+export type BudgetId = BudgetDTO["budgetId"];
+export type Budget = BudgetDTO;
+export type BudgetUpsertInput = BudgetUpsertInputDTO;

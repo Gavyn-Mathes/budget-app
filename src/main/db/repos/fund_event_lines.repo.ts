@@ -11,14 +11,26 @@ export class FundEventLineRepo {
       .prepare(
         `
         SELECT
-          line_id, event_id,
-          asset_id, liability_id,
-          quantity_delta, balance_delta,
-          unit_price, fee, notes,
-          created_at, updated_at
+          line_id,
+          event_id,
+          line_no,
+
+          asset_id,
+          liability_id,
+
+          line_kind,
+          quantity_delta_minor,
+          money_delta_minor,
+
+          unit_price,
+          fee_minor,
+          notes,
+
+          created_at,
+          updated_at
         FROM fund_event_line
         WHERE event_id = ?
-        ORDER BY line_id
+        ORDER BY line_no ASC
       `
       )
       .all(eventId) as DbFundEventLineRow[];
@@ -31,14 +43,26 @@ export class FundEventLineRepo {
       .prepare(
         `
         SELECT
-          line_id, event_id,
-          asset_id, liability_id,
-          quantity_delta, balance_delta,
-          unit_price, fee, notes,
-          created_at, updated_at
+          line_id,
+          event_id,
+          line_no,
+
+          asset_id,
+          liability_id,
+
+          line_kind,
+          quantity_delta_minor,
+          money_delta_minor,
+
+          unit_price,
+          fee_minor,
+          notes,
+
+          created_at,
+          updated_at
         FROM fund_event_line
         WHERE asset_id = ?
-        ORDER BY created_at, line_id
+        ORDER BY created_at ASC, event_id ASC, line_no ASC
       `
       )
       .all(assetId) as DbFundEventLineRow[];
@@ -51,14 +75,26 @@ export class FundEventLineRepo {
       .prepare(
         `
         SELECT
-          line_id, event_id,
-          asset_id, liability_id,
-          quantity_delta, balance_delta,
-          unit_price, fee, notes,
-          created_at, updated_at
+          line_id,
+          event_id,
+          line_no,
+
+          asset_id,
+          liability_id,
+
+          line_kind,
+          quantity_delta_minor,
+          money_delta_minor,
+
+          unit_price,
+          fee_minor,
+          notes,
+
+          created_at,
+          updated_at
         FROM fund_event_line
         WHERE liability_id = ?
-        ORDER BY created_at, line_id
+        ORDER BY created_at ASC, event_id ASC, line_no ASC
       `
       )
       .all(liabilityId) as DbFundEventLineRow[];

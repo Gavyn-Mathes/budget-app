@@ -1,7 +1,7 @@
 // shared/ipc/transactions.ts
 import { z } from "zod";
 import { IdSchema, MonthKeySchema } from "../schemas/common";
-import { TransactionSchema } from "../schemas/transaction";
+import { TransactionSchema, TransactionUpsertInputSchema } from "../schemas/transaction";
 
 export const TRANSACTIONS_IPC = {
   ListByMonth: "transactions:list-by-month",
@@ -9,19 +9,18 @@ export const TRANSACTIONS_IPC = {
   Delete: "transactions:delete",
 } as const;
 
-/**
- * Listing by month is common since budgets are monthly.
- * Main process can query by date range for that month.
- */
 export const ListByMonthReq = z.object({
-  monthKey: MonthKeySchema, // "YYYY-MM"
+  monthKey: MonthKeySchema,
 });
 export const ListByMonthRes = z.object({
   transactions: z.array(TransactionSchema),
 });
 
-export const UpsertReq = z.object({ transaction: TransactionSchema });
-export const UpsertRes = z.object({ ok: z.literal(true) });
+export const UpsertReq = z.object({
+  transaction: TransactionUpsertInputSchema,
+  monthKey: MonthKeySchema.optional(),
+});
+export const UpsertRes = z.object({ ok: z.literal(true), transaction: TransactionSchema });
 
 export const DeleteReq = z.object({ transactionId: IdSchema });
 export const DeleteRes = z.object({ ok: z.literal(true) });

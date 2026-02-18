@@ -1,0 +1,142 @@
+/* src/renderer/src/styles/FundsLiabilitiesPage.css */
+.fundLiab {
+  padding: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.fundLiab__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.fundLiab__title {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.fundLiab__subtitle {
+  margin-top: 6px;
+  opacity: 0.75;
+}
+
+.fundLiab__actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.fundLiab__error {
+  margin: 10px 0 14px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 0, 0, 0.10);
+  border: 1px solid rgba(255, 0, 0, 0.25);
+}
+
+.fundLiab__card {
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(0, 0, 0, 0.14);
+  overflow: hidden;
+  padding: 12px;
+}
+
+.fundLiab__muted {
+  opacity: 0.7;
+  padding: 12px;
+}
+
+.fundLiab__groups {
+  display: grid;
+  gap: 14px;
+}
+
+.fundLiab__group {
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.fundLiab__groupHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.fundLiab__groupTitle {
+  font-weight: 700;
+}
+
+.fundLiab__groupCount {
+  opacity: 0.7;
+  font-size: 12px;
+}
+
+.fundLiab__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.fundLiab__table th,
+.fundLiab__table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+  vertical-align: top;
+}
+
+.fundLiab__table thead th {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.fundLiab__right {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.fundLiab__num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.fundLiab__name {
+  font-weight: 600;
+}
+
+.fundLiab__btn {
+  margin-left: 8px;
+}
+
+.fundLiabForm {
+  display: grid;
+  gap: 12px;
+}
+
+.fundLiabField {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+  opacity: 0.95;
+}
+
+.fundLiabField input,
+.fundLiabField select {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.22);
+  color: inherit;
+}
+
+.fundLiabShow__k {
+  opacity: 0.7;
+  margin-right: 6px;
+}

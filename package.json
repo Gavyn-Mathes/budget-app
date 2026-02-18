@@ -4,9 +4,18 @@
   "description": "A Budget App Project for personal budget tracking.",
   "main": "out/main/main.js",
   "scripts": {
+    "clean": "rimraf out",
+    "clean:all": "rimraf out node_modules package-lock.json",
+    "rebuild": "npm run clean && npm run build",
+    "postinstall": "electron-builder install-app-deps",
     "start": "electron .",
     "dev": "electron-vite dev",
     "build": "electron-vite build",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win nsis",
+    "dist:mac": "electron-builder --mac",
+    "dist:linux": "electron-builder --linux AppImage deb",
+    "quick-start": "electron-vite build && electron-vite .",
     "preview": "electron-vite preview",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,7 +28,9 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.2",
     "electron": "^39.2.7",
+    "electron-builder": "^26.7.0",
     "electron-vite": "^5.0.0",
+    "rimraf": "^6.1.2",
     "typescript": "^5.9.3",
     "vite": "^7.3.0"
   },
@@ -27,14 +38,66 @@
     "better-sqlite3": "^12.5.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
+    "react-router-dom": "^7.13.0",
+    "win32": "^7.2.0",
     "zod": "^4.3.6"
   },
   "build": {
+    "appId": "com.gavynmathes.budgetapp",
+    "productName": "budget-app",
+    "files": [
+      "out/**",
+      "node_modules/**",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "**/*.node"
+    ],
+    "directories": {
+      "buildResources": "build"
+    },
     "extraResources": [
       {
         "from": "resources/migrations",
         "to": "migrations"
       }
-    ]
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Gavyn-Mathes",
+        "repo": "budget-app"
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "budget-app"
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "build/icon.icns",
+      "identity": null,
+      "hardenedRuntime": false,
+      "notarize": false,
+      "category": "public.app-category.finance"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Office",
+      "icon": "build/icons"
+    }
   }
 }

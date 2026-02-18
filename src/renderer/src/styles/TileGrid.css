@@ -1,0 +1,17 @@
+/* renderer/src/styles/TileGrid.css */
+.tileGrid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 14px;
+}
+
+.tileGrid > * {
+  grid-column: span 6;
+  min-height: 96px;
+}
+
+@media (max-width: 900px) {
+  .tileGrid > * {
+    grid-column: span 12;
+  }
+}

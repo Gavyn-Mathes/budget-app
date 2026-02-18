@@ -1,0 +1,293 @@
+/* src/renderer/src/styles/FundEventsLinesPage.css */
+
+.fundEventsLinesPage {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fundEventsLinesPage__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.fundEventsLinesPage__title {
+  margin: 0;
+}
+
+.fundEventsLinesPage__subtitle {
+  opacity: 0.8;
+}
+
+.fundEventsLinesPage__filters {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.fundEventsLinesPage__field {
+  display: grid;
+  gap: 6px;
+}
+
+.fundEventsLinesPage__label {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.fundEventsLinesPage__input {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+}
+
+.fundEventsLinesPage__error {
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 0, 0, 0.35);
+  background: rgba(255, 0, 0, 0.08);
+  border-radius: 10px;
+}
+
+.fundEventsLinesPage__tableWrap {
+  overflow: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.fundEventsLinesPage__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.fundEventsLinesPage__table th,
+.fundEventsLinesPage__table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  vertical-align: top;
+}
+
+.fundEventsLinesPage__muted {
+  opacity: 0.75;
+  padding: 14px 12px;
+}
+
+.fundEventsLinesPage__memo {
+  max-width: 560px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fundEventsLinesPage__transfer {
+  max-width: 520px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fundEventsLinesPage__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* ------------------------------ */
+/* Modal (dialog) styles          */
+/* ------------------------------ */
+
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: grid;
+  place-items: center;
+  z-index: 50;
+  padding: 20px;
+}
+
+.modal {
+  width: min(720px, 96vw);
+  max-height: 90vh;
+  overflow: auto;
+
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(20, 20, 20, 0.95);
+  padding: 16px;
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.modal--wide {
+  width: min(1100px, 96vw);
+}
+
+.modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 12px;
+}
+
+.modal__title {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.modal__subtitle {
+  opacity: 0.8;
+  margin-top: 4px;
+  font-size: 0.95rem;
+}
+
+.modal__body {
+  display: grid;
+  gap: 12px;
+}
+
+.modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.modal__error {
+  margin: 10px 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 0, 0, 0.35);
+  background: rgba(255, 0, 0, 0.08);
+  border-radius: 10px;
+}
+
+.modal__muted {
+  opacity: 0.75;
+}
+
+/* Form fields inside modal */
+
+.modal__field {
+  display: grid;
+  gap: 6px;
+}
+
+.modal__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal__label {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.modal input,
+.modal textarea,
+.modal select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+}
+
+.modal textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+/* 2-column layout used in editor dialog */
+.modal__grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Section headers inside modal (e.g. "Event" / "Lines") */
+.modal__sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 6px;
+  margin-bottom: 8px;
+}
+
+.modal__sectionTitle {
+  font-weight: 700;
+}
+
+/* Create dialog line cards (if you use them) */
+.modal__line {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  display: grid;
+  gap: 10px;
+}
+
+/* ------------------------------ */
+/* Lines table inside Edit dialog */
+/* ------------------------------ */
+
+.linesTable {
+  overflow: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.linesTable__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.linesTable__table th,
+.linesTable__table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.linesTable__num {
+  text-align: right;
+}
+
+.linesTable__change {
+  text-align: right;
+  font-weight: 700;
+}
+
+.linesTable__change--positive {
+  color: #35d399;
+}
+
+.linesTable__change--negative {
+  color: #f87171;
+}
+
+.linesTable__muted {
+  opacity: 0.75;
+  padding: 14px 12px;
+}
+
+.linesTable__notes {
+  max-width: 360px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

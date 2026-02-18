@@ -1,7 +1,7 @@
 // shared/ipc/event_types.ts
 import { z } from "zod";
 import { IdSchema } from "../schemas/common";
-import { EventTypeSchema } from "../schemas/event_type";
+import { EventTypeSchema, EventTypeEditableSchema } from "../schemas/event_type";
 
 export const EVENT_TYPES_IPC = {
   List: "event-types:list",
@@ -13,7 +13,7 @@ export const EVENT_TYPES_IPC = {
 
 export const ListReq = z.object({});
 export const ListRes = z.object({
-  types: z.array(EventTypeSchema),
+  eventTypes: z.array(EventTypeSchema),
 });
 
 export const GetByIdReq = z.object({ eventTypeId: IdSchema });
@@ -22,7 +22,7 @@ export const GetByIdRes = z.object({
 });
 
 export const CreateReq = z.object({
-  eventType: z.string().min(1),
+  eventType: EventTypeEditableSchema.shape.eventType,
 });
 export const CreateRes = z.object({
   data: EventTypeSchema,
@@ -30,7 +30,7 @@ export const CreateRes = z.object({
 
 export const UpdateReq = z.object({
   eventTypeId: IdSchema,
-  eventType: z.string().min(1),
+  eventType: EventTypeEditableSchema.shape.eventType,
 });
 export const UpdateRes = z.object({
   data: EventTypeSchema,

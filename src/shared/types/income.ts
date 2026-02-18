@@ -1,20 +1,18 @@
 // shared/types/income.ts
-import type { Id, MonthKey, IsoDate, IsoTimestamp, Money } from "./common";
+import type {
+  IncomeDTO,
+  IncomeMonthDTO,
+  IncomeMonthUpsertInputDTO,
+  IncomeUpsertInputDTO,
+} from "../schemas/income";
 
-export type IncomeId = Id;
+export type IncomeId = IncomeDTO["incomeId"];
 
-export interface IncomeMonth {
-  incomeMonthKey: MonthKey; // "YYYY-MM"
-}
+export type IncomeMonth = IncomeMonthDTO;
+export type IncomeMonthUpsertInput = IncomeMonthUpsertInputDTO;
+export type Income = IncomeDTO;
 
-export interface Income {
-  incomeId: IncomeId;
-  incomeMonthKey: MonthKey; // FK -> income_month.income_month_key
-  name: string;
-  date: IsoDate;
-  amount: Money;            // >= 0
-  notes: string | null;
-
-  createdAt: IsoTimestamp;
-  updatedAt: IsoTimestamp;
-}
+/**
+ * What UI sends to main for create/update.
+ */
+export type IncomeUpsertInput = IncomeUpsertInputDTO;

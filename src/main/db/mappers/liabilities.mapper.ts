@@ -1,5 +1,5 @@
 // main/db/mappers/liabilities.mapper.ts
-import type { Liability } from "../../../shared/types/liability";
+import type { Liability, LiabilityWithBalance } from "../../../shared/types/liability";
 
 export type DbLiabilityJoinedRow = {
   // liability (base)
@@ -11,8 +11,6 @@ export type DbLiabilityJoinedRow = {
 
   name: string;
   apr: number | null;
-  currency_code: string;
-  current_balance: number;
 
   opened_date: string | null;
   created_at: string;
@@ -36,6 +34,10 @@ export type DbLiabilityJoinedRow = {
   statement_day: number | null;
 };
 
+export type DbLiabilityWithBalanceJoinedRow = DbLiabilityJoinedRow & {
+  money_balance_minor: number;
+};
+
 export function mapLiability(row: DbLiabilityJoinedRow): Liability {
   const base = {
     liabilityId: row.liability_id,
@@ -46,8 +48,6 @@ export function mapLiability(row: DbLiabilityJoinedRow): Liability {
 
     name: row.name,
     apr: row.apr,
-    currencyCode: row.currency_code as any,
-    currentBalance: row.current_balance as any,
 
     openedDate: row.opened_date,
     createdAt: row.created_at,
@@ -90,5 +90,12 @@ export function mapLiability(row: DbLiabilityJoinedRow): Liability {
     dueDay: row.due_day,
     statementDay: row.statement_day,
     ...minPayment,
+  };
+}
+
+export function mapLiabilityWithBalance(row: DbLiabilityWithBalanceJoinedRow): LiabilityWithBalance {
+  return {
+    ...mapLiability(row),
+    balanceMinor: row.money_balance_minor ?? 0,
   };
 }

@@ -11,5 +11,6 @@ export * from "./fund_events.repo";
 export * from "./fund_event_lines.repo";
 export * from "./funds.repo";
 export * from "./incomes.repo";
+export * from "./liability_account_moves.repo";
 export * from "./liabilities.repo";
 export * from "./transactions.repo";

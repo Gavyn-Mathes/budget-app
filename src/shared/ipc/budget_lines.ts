@@ -1,7 +1,7 @@
 // shared/ipc/budget_lines.ts
 import { z } from "zod";
 import { IdSchema } from "../schemas/common";
-import { BudgetLineSchema } from "../schemas/budget_line";
+import { BudgetLineSchema, BudgetLineUpsertInputSchema } from "../schemas/budget_line";
 
 export const BUDGET_LINES_IPC = {
   ListByBudget: "budget-lines:list-by-budget",
@@ -13,12 +13,12 @@ export const ListByBudgetReq = z.object({
   budgetId: IdSchema,
 });
 export const ListByBudgetRes = z.object({
-  lines: z.array(BudgetLineSchema),
+  budgetLines: z.array(BudgetLineSchema),
 });
 
 export const UpsertManyReq = z.object({
   budgetId: IdSchema,
-  lines: z.array(BudgetLineSchema),
+  lines: z.array(BudgetLineUpsertInputSchema),
 });
 export const UpsertManyRes = z.object({
   ok: z.literal(true),

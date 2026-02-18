@@ -1,23 +1,7 @@
 // shared/types/budget_line.ts
-import type { Money, IsoTimestamp } from "./common";
-import type { BudgetId } from "./budget";
-import type { CategoryId } from "./category";
+import type { BudgetLineDTO, BudgetLineUpsertInputDTO } from "../schemas/budget_line";
 
-type BudgetLineBase = {
-  budgetId: BudgetId;
-  categoryId: CategoryId;
-  createdAt: IsoTimestamp;
-  updatedAt: IsoTimestamp;
-};
-
-export type BudgetLine =
-  | (BudgetLineBase & {
-      allocationType: "FIXED";
-      fixedAmount: Money;
-      percent: null;
-    })
-  | (BudgetLineBase & {
-      allocationType: "PERCENT";
-      fixedAmount: null;
-      percent: number; // 0..1
-    });
+export type BudgetLine = BudgetLineDTO;
+export type BudgetLineUpsertInput = BudgetLineUpsertInputDTO;
+export type CategoryId = BudgetLineDTO["categoryId"];
+export type BudgetId = BudgetLineDTO["budgetId"];

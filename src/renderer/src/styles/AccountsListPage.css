@@ -1,0 +1,69 @@
+/* src/renderer/src/styles/AccountsPage.css */
+.accountsPage {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.accountsPage__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.accountsPage__title {
+  margin: 0;
+}
+
+.accountsPage__subtitle {
+  opacity: 0.8;
+}
+
+.accountsPage__error {
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 0, 0, 0.35);
+  background: rgba(255, 0, 0, 0.08);
+  border-radius: 10px;
+}
+
+.accountsPage__tableWrap {
+  overflow: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.accountsPage__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.accountsPage__table th,
+.accountsPage__table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  vertical-align: top;
+}
+
+.accountsPage__num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.accountsPage__muted {
+  opacity: 0.75;
+  padding: 14px 12px;
+}
+
+.accountsPage__notes {
+  max-width: 680px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.accountsPage__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}

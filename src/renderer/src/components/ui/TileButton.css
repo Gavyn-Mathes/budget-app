@@ -1,0 +1,25 @@
+/* renderer/src/components/ui/TileButton.css */
+.tile {
+  text-align: left;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tile:hover {
+  border-color: rgba(0, 0, 0, 0.22);
+}
+
+.tile__title {
+  font-weight: 650;
+}
+
+.tile__subtitle {
+  opacity: 0.75;
+  font-size: 0.9rem;
+}

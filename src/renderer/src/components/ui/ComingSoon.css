@@ -1,0 +1,49 @@
+/* src/renderer/src/components/ui/ComingSoon.css */
+.comingSoon {
+  padding: 18px;
+  display: flex;
+  justify-content: center;
+}
+
+.comingSoon__card {
+  width: 760px;
+  max-width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 16px;
+  background: white;
+  padding: 18px;
+}
+
+.comingSoon__badge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  opacity: 0.85;
+}
+
+.comingSoon__title {
+  margin: 10px 0 6px;
+  font-size: 1.6rem;
+}
+
+.comingSoon__desc {
+  opacity: 0.75;
+  line-height: 1.35;
+}
+
+.comingSoon__list {
+  margin: 12px 0 0;
+  padding-left: 18px;
+  opacity: 0.9;
+  display: grid;
+  gap: 6px;
+}
+
+.comingSoon__actions {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}

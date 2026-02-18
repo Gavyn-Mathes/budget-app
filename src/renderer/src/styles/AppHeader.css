@@ -1,0 +1,63 @@
+/* src/renderer/src/styles/AppHeader.css */
+.appHeader {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #0f172a;
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.appHeader__inner {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 16px;
+}
+
+.appHeader__brand {
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.appHeader__nav {
+  display: flex;
+  gap: 10px;
+}
+
+.appHeader__link {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.appHeader__link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+.appHeader__link.is-active {
+  background: rgba(255, 255, 255, 0.14);
+  color: white;
+}
+
+.appHeader__right {
+  margin-left: auto;
+}
+
+.appHeader__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.appHeader__brandLogo {
+  height: 28px;
+  width: auto;
+  display: block;
+}

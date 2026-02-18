@@ -2,21 +2,24 @@
 PRAGMA foreign_keys = ON;
 
 CREATE TABLE IF NOT EXISTS fund_event_line (
-  line_id        TEXT PRIMARY KEY, -- UUID/ULID
-  event_id       TEXT NOT NULL,
+  line_id              TEXT PRIMARY KEY, -- UUID/ULID
+  event_id             TEXT NOT NULL,
+  line_no              INTEGER NOT NULL,
 
-  asset_id       TEXT,             -- nullable (set for asset lines)
-  liability_id   TEXT,             -- nullable (set for liability lines)
+  asset_id             TEXT,
+  liability_id         TEXT,
 
-  quantity_delta REAL,             -- used when asset_id is set (+/-)
-  balance_delta  REAL,             -- used when liability_id is set (+/-)
+  line_kind            TEXT NOT NULL,     -- 'ASSET_QUANTITY' | 'ASSET_MONEY' | 'LIABILITY_MONEY'
 
-  unit_price     REAL,             -- optional (>= 0), useful for buys/sells
-  fee            REAL,             -- optional (>= 0)
-  notes          TEXT,
+  quantity_delta_minor INTEGER,           -- scaled integer (QTY_SCALE=1e6)
+  money_delta_minor    INTEGER,           -- cents (+/-)
+  fee_minor            INTEGER,           -- cents (>= 0)
 
-  created_at     TEXT NOT NULL,    -- ISO timestamp
-  updated_at     TEXT NOT NULL,    -- ISO timestamp
+  unit_price           TEXT,              -- optional (e.g. "187.32"), informational
+  notes                TEXT,
+
+  created_at           TEXT NOT NULL,
+  updated_at           TEXT NOT NULL,
 
   FOREIGN KEY (event_id)
     REFERENCES fund_event(event_id)
@@ -33,19 +36,28 @@ CREATE TABLE IF NOT EXISTS fund_event_line (
     ON UPDATE CASCADE
     ON DELETE RESTRICT,
 
-  CHECK (unit_price IS NULL OR unit_price >= 0),
-  CHECK (fee IS NULL OR fee >= 0),
+  UNIQUE(event_id, line_no),
 
-  -- EXACTLY ONE TARGET per line, with matching delta column
+  CHECK (line_kind IN ('ASSET_QUANTITY','ASSET_MONEY','LIABILITY_MONEY')),
+  CHECK (fee_minor IS NULL OR fee_minor >= 0),
+
+  -- exactly one target
   CHECK (
-    (asset_id IS NOT NULL AND liability_id IS NULL AND quantity_delta IS NOT NULL AND balance_delta IS NULL)
-    OR
-    (liability_id IS NOT NULL AND asset_id IS NULL AND balance_delta IS NOT NULL AND quantity_delta IS NULL)
+    (asset_id IS NOT NULL AND liability_id IS NULL) OR
+    (asset_id IS NULL AND liability_id IS NOT NULL)
   ),
 
-  -- Disallow zero deltas
-  CHECK (quantity_delta IS NULL OR quantity_delta <> 0),
-  CHECK (balance_delta  IS NULL OR balance_delta  <> 0)
+  -- enforce which delta column is used
+  CHECK (
+    (line_kind = 'ASSET_QUANTITY' AND asset_id IS NOT NULL AND quantity_delta_minor IS NOT NULL AND money_delta_minor IS NULL)
+    OR
+    (line_kind = 'ASSET_MONEY' AND asset_id IS NOT NULL AND money_delta_minor IS NOT NULL AND quantity_delta_minor IS NULL)
+    OR
+    (line_kind = 'LIABILITY_MONEY' AND liability_id IS NOT NULL AND money_delta_minor IS NOT NULL AND quantity_delta_minor IS NULL)
+  ),
+
+  CHECK (quantity_delta_minor IS NULL OR quantity_delta_minor <> 0),
+  CHECK (money_delta_minor IS NULL OR money_delta_minor <> 0)
 );
 
 CREATE INDEX IF NOT EXISTS idx_fund_event_line_event_id

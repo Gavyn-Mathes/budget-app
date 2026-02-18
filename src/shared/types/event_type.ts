@@ -1,11 +1,6 @@
 // shared/types/event_type.ts
-import type { Id, IsoTimestamp } from "./common";
+import type { EventTypeDTO, EventTypeEditableDTO } from "../schemas/event_type";
 
-export type EventTypeId = Id;
-
-export interface EventType {
-  eventTypeId: EventTypeId;
-  eventType: string; // display label (e.g., "DEPOSIT", "BUY")
-  createdAt: IsoTimestamp;
-  updatedAt: IsoTimestamp;
-}
+export type EventTypeId = EventTypeDTO["eventTypeId"];
+export type EventType = EventTypeDTO;
+export type EventTypeEditable = EventTypeEditableDTO;

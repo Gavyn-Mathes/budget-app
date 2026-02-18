@@ -1,7 +1,7 @@
 // shared/ipc/distributions.ts
 import { z } from "zod";
 import { IdSchema } from "../schemas/common";
-import { DistributionRuleSchema } from "../schemas/distribution";
+import { DistributionRuleSchema, DistributionRuleUpsertInputSchema } from "../schemas/distribution";
 
 export const DISTRIBUTIONS_IPC = {
   ListByBudget: "distributions:list-by-budget",
@@ -10,11 +10,11 @@ export const DISTRIBUTIONS_IPC = {
 } as const;
 
 export const ListByBudgetReq = z.object({ budgetId: IdSchema });
-export const ListByBudgetRes = z.object({ rules: z.array(DistributionRuleSchema) });
+export const ListByBudgetRes = z.object({ distributions: z.array(DistributionRuleSchema) });
 
 export const UpsertManyReq = z.object({
   budgetId: IdSchema,
-  rules: z.array(DistributionRuleSchema),
+  rules: z.array(DistributionRuleUpsertInputSchema),
 });
 export const UpsertManyRes = z.object({ ok: z.literal(true) });
 

@@ -1,0 +1,104 @@
+/* src/renderer/src/styles/BudgetsMonthsPage.css */
+
+.budgetsMonths {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.budgetsMonths__headerActions {
+  display: flex;
+  gap: 10px;
+}
+
+.budgetsMonths__error {
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 0, 0, 0.35);
+  background: rgba(255, 0, 0, 0.08);
+  border-radius: 10px;
+}
+
+.budgetsMonths__notice {
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 200, 120, 0.35);
+  background: rgba(0, 200, 120, 0.12);
+  border-radius: 10px;
+}
+
+.budgetsMonths__panel {
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px;
+  display: grid;
+  gap: 12px;
+}
+
+.budgetsMonths__panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.budgetsMonths__panelTitle {
+  font-weight: 700;
+}
+
+.budgetsMonths__panelSubtitle {
+  opacity: 0.8;
+}
+
+.budgetsMonths__loading {
+  opacity: 0.75;
+  padding: 12px;
+}
+
+.budgetsMonths__empty {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+}
+
+.budgetsMonths__emptyTitle {
+  font-weight: 700;
+}
+
+.budgetsMonths__emptySubtitle {
+  opacity: 0.75;
+}
+
+.budgetsMonths__tableWrap {
+  overflow: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.budgetsMonths__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.budgetsMonths__table th,
+.budgetsMonths__table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  vertical-align: top;
+}
+
+.budgetsMonths__right {
+  text-align: right;
+}
+
+.budgetsMonths__actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.budgetsMonths__notes {
+  max-width: 360px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

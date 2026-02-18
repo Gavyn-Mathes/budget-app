@@ -1,0 +1,144 @@
+/* src/renderer/src/styles/FundsAssetsPage.css */
+/* (file) src/renderer/src/styles/FundsAssetsPage.css */
+
+.fundAssets {
+  padding: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.fundAssets__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.fundAssets__title {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.fundAssets__subtitle {
+  margin-top: 6px;
+  opacity: 0.75;
+}
+
+.fundAssets__actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.fundAssets__error {
+  margin: 10px 0 14px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 0, 0, 0.10);
+  border: 1px solid rgba(255, 0, 0, 0.25);
+}
+
+.fundAssets__card {
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(0, 0, 0, 0.14);
+  overflow: hidden;
+  padding: 12px;
+}
+
+.fundAssets__muted {
+  opacity: 0.7;
+  padding: 12px;
+}
+
+.fundAssets__groups {
+  display: grid;
+  gap: 14px;
+}
+
+.fundAssets__group {
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.fundAssets__groupHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.fundAssets__groupTitle {
+  font-weight: 700;
+}
+
+.fundAssets__groupCount {
+  opacity: 0.7;
+  font-size: 12px;
+}
+
+.fundAssets__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.fundAssets__table th,
+.fundAssets__table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+  vertical-align: top;
+}
+
+.fundAssets__table thead th {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.fundAssets__right {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.fundAssets__num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.fundAssets__name {
+  font-weight: 600;
+}
+
+.fundAssets__btn {
+  margin-left: 8px;
+}
+
+.fundAssetsForm {
+  display: grid;
+  gap: 12px;
+}
+
+.fundAssetsField {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+  opacity: 0.95;
+}
+
+.fundAssetsField input,
+.fundAssetsField select {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.22);
+  color: inherit;
+}
+
+.fundAssetsShow__k {
+  opacity: 0.7;
+  margin-right: 6px;
+}

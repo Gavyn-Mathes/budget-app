@@ -1,6 +1,6 @@
 // main/db/repos/categories.repo.ts
 import Database from "better-sqlite3";
-import type { Category } from "../../../shared/types/category";
+import type { Category, CategoryUpsertInput } from "../../../shared/types/category";
 import { mapCategory, type DbCategoryRow } from "../mappers/categories.mapper";
 import { nowIso, newId, assertChanges } from "../mappers/common";
 
@@ -42,7 +42,7 @@ export class CategoriesRepo {
    *
    * Note: name is UNIQUE (SQLite will throw on conflicts).
    */
-  upsert(input: Category): Category {
+  upsert(input: CategoryUpsertInput): Category {
     const id = input.categoryId?.trim() ? input.categoryId : newId();
     const ts = nowIso();
 

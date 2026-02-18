@@ -1,0 +1,113 @@
+name: Release Installers
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: "false"
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: linux
+            os: ubuntu-latest
+            dist_command: npm run dist:linux
+            artifact_globs: |
+              dist/*.AppImage
+              dist/*.deb
+              dist/SHA256SUMS
+              dist/SHA256SUMS.asc
+          - target: windows
+            os: windows-latest
+            dist_command: npm run dist:win
+            artifact_globs: |
+              dist/*.exe
+              dist/*.blockmap
+              dist/latest*.yml
+          - target: macos
+            os: macos-latest
+            dist_command: npm run dist:mac
+            artifact_globs: |
+              dist/*.dmg
+              dist/*.zip
+              dist/latest-mac*.yml
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build app
+        run: npm run build
+
+      - name: Build installers
+        run: ${{ matrix.dist_command }}
+
+      - name: Sign Linux checksums (optional)
+        if: matrix.target == 'linux' && secrets.LINUX_GPG_PRIVATE_KEY != ''
+        shell: bash
+        env:
+          LINUX_GPG_PRIVATE_KEY: ${{ secrets.LINUX_GPG_PRIVATE_KEY }}
+          LINUX_GPG_PASSPHRASE: ${{ secrets.LINUX_GPG_PASSPHRASE }}
+        run: |
+          echo "$LINUX_GPG_PRIVATE_KEY" | gpg --batch --import
+          sha256sum dist/*.AppImage > dist/SHA256SUMS
+          gpg --batch --yes --pinentry-mode loopback \
+            --passphrase "$LINUX_GPG_PASSPHRASE" \
+            --armor --detach-sign dist/SHA256SUMS
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: installers-${{ matrix.target }}
+          if-no-files-found: warn
+          path: ${{ matrix.artifact_globs }}
+
+  publish:
+    name: Publish GitHub Release
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+
+      - name: Create or update release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          fail_on_unmatched_files: false
+          files: |
+            release-assets/*.AppImage
+            release-assets/*.deb
+            release-assets/*.exe
+            release-assets/*.dmg
+            release-assets/*.zip
+            release-assets/*.blockmap
+            release-assets/latest*.yml
+            release-assets/SHA256SUMS
+            release-assets/SHA256SUMS.asc

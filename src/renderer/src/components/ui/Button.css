@@ -1,0 +1,105 @@
+/* renderer/src/components/ui/Button.css */
+
+.btn {
+  appearance: none;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: white;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font: inherit;
+  line-height: 1;
+  user-select: none;
+  transition: background 120ms ease, border-color 120ms ease, transform 80ms ease, box-shadow 120ms ease;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Consistent focus ring (same idea as your secondary) */
+.btn:focus-visible {
+  outline: 2px solid rgba(0, 0, 0, 0.25);
+  outline-offset: 2px;
+}
+
+/* Default variant interactions */
+.btn:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.btn:active:not(:disabled) {
+  background: rgba(0, 0, 0, 0.06);
+  transform: translateY(1px);
+}
+
+/* PRIMARY */
+.btn--primary {
+  background: #111827;
+  border-color: #111827;
+  color: white;
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: #0b1220;
+  border-color: #0b1220;
+}
+
+.btn--primary:active:not(:disabled) {
+  background: #060b16;
+  border-color: #060b16;
+  transform: translateY(1px);
+}
+
+/* DANGER */
+.btn--danger {
+  background: #b91c1c;
+  border-color: #b91c1c;
+  color: white;
+}
+
+.btn--danger:hover:not(:disabled) {
+  background: #991b1b;
+  border-color: #991b1b;
+}
+
+.btn--danger:active:not(:disabled) {
+  background: #7f1d1d;
+  border-color: #7f1d1d;
+  transform: translateY(1px);
+}
+
+/* GHOST */
+.btn--ghost {
+  background: transparent;
+  border-color: transparent;
+}
+
+.btn--ghost:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.btn--ghost:active:not(:disabled) {
+  background: rgba(0, 0, 0, 0.09);
+  border-color: rgba(0, 0, 0, 0.12);
+  transform: translateY(1px);
+}
+
+/* SECONDARY (your existing style, kept, but now aligned) */
+.btn--secondary {
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.btn--secondary:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.btn--secondary:active:not(:disabled) {
+  background: rgba(0, 0, 0, 0.12);
+  transform: translateY(1px);
+}
+
+/* Keep focus-visible consistent via .btn:focus-visible */

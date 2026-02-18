@@ -7,10 +7,11 @@ CREATE TABLE IF NOT EXISTS distribution (
   budget_id        TEXT NOT NULL,
   source_type      TEXT NOT NULL CHECK (source_type IN ('SURPLUS','CATEGORY')),
   category_id      TEXT,                 -- required if source_type='CATEGORY'
-  fund_id          TEXT NOT NULL,         -- references your Funds table (elsewhere)
+  fund_id          TEXT NOT NULL,
+  asset_id         TEXT,                  -- optional target asset (cash) within fund
 
   allocation_type  TEXT NOT NULL CHECK (allocation_type IN ('FIXED','PERCENT')),
-  fixed_amount     REAL CHECK (fixed_amount >= 0),
+  fixed_amount     INTEGER CHECK (fixed_amount >= 0), -- minor units
   percent          REAL CHECK (percent >= 0 AND percent <= 1),
 
   created_at       TEXT NOT NULL,
@@ -23,6 +24,16 @@ CREATE TABLE IF NOT EXISTS distribution (
 
   FOREIGN KEY (category_id)
     REFERENCES entry_categories(category_id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (asset_id)
+    REFERENCES assets(asset_id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (fund_id)
+    REFERENCES funds(fund_id)
     ON UPDATE CASCADE
     ON DELETE RESTRICT,
 
@@ -39,11 +50,9 @@ CREATE TABLE IF NOT EXISTS distribution (
     OR
     (allocation_type = 'PERCENT' AND percent IS NOT NULL AND fixed_amount IS NULL)
   )
-
-  -- Optional if your funds table exists in the same DB:
-  -- ,FOREIGN KEY (fund_id) REFERENCES funds(fund_id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
 CREATE INDEX IF NOT EXISTS idx_distribution_budget_id   ON distribution(budget_id);
 CREATE INDEX IF NOT EXISTS idx_distribution_category_id ON distribution(category_id);
 CREATE INDEX IF NOT EXISTS idx_distribution_fund_id     ON distribution(fund_id);
+CREATE INDEX IF NOT EXISTS idx_distribution_asset_id    ON distribution(asset_id);

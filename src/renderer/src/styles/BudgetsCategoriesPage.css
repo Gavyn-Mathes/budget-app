@@ -1,0 +1,184 @@
+/* src/renderer/src/styles/BudgetsCategoriesPage.css */
+
+.budgetsCats {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.budgetsCats__headerActions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.budgetsCats__error {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 0, 0, 0.06);
+}
+
+.budgetsCats__panel {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.budgetsCats__panelHeader {
+  margin-bottom: 12px;
+}
+
+.budgetsCats__panelTitle {
+  font-weight: 700;
+}
+
+.budgetsCats__panelSubtitle {
+  font-size: 13px;
+  opacity: 0.75;
+  margin-top: 4px;
+}
+
+.budgetsCats__loading {
+  padding: 8px 2px;
+  opacity: 0.75;
+}
+
+.budgetsCats__empty {
+  padding: 18px;
+  text-align: center;
+}
+
+.budgetsCats__emptyTitle {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.budgetsCats__emptySubtitle {
+  font-size: 13px;
+  opacity: 0.75;
+  margin-bottom: 12px;
+}
+
+/* Table */
+.catsTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.catsTable th,
+.catsTable td {
+  padding: 10px 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  vertical-align: top;
+}
+
+.catsTable thead th {
+  border-top: none;
+  font-size: 12px;
+  opacity: 0.75;
+  text-align: left;
+}
+
+.catsTable__actionsCol {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.catsTable__rowActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* Dialog */
+.catDialog__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+.catDialog__panel {
+  width: min(520px, 100%);
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.catDialog__header {
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.catDialog__title {
+  font-weight: 700;
+}
+
+.catDialog__close {
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.catDialog__body {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.catDialog__label {
+  font-size: 12px;
+  opacity: 0.85;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.catDialog__input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  outline: none;
+}
+
+.catDialog__hint {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.catDialog__footer {
+  padding: 12px 14px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 900px) {
+  .budgetsCats {
+    padding: 18px;
+  }
+  .catsTable__rowActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 520px) {
+  .budgetsCats {
+    padding: 14px;
+    gap: 14px;
+  }
+}

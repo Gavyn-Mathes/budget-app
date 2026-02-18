@@ -1,5 +1,5 @@
 // preload/api/distributions.api.ts
 import * as Shared from "../../shared/ipc/distributions";
-import { makeZodApiModule } from "./common";
+import { makeApiModule } from "./common";
 
-export const distributionsApi = makeZodApiModule(Shared);
+export const distributionsApi = makeApiModule(Shared);

@@ -1,7 +1,12 @@
 // main/db/repos/assets.repo.ts
 import Database from "better-sqlite3";
-import type { Asset } from "../../../shared/types/asset";
-import { mapAsset, type DbAssetJoinedRow } from "../mappers/assets.mapper";
+import type { Asset, AssetUpsertInput, AssetWithBalance } from "../../../shared/types/asset";
+import {
+  mapAsset,
+  mapAssetWithBalance,
+  type DbAssetJoinedRow,
+  type DbAssetWithBalanceJoinedRow,
+} from "../mappers/assets.mapper";
 import { nowIso, newId, assertChanges } from "../mappers/common";
 
 type ExistingAssetRow = {
@@ -37,6 +42,35 @@ export class AssetsRepo {
     return rows.map(mapAsset);
   }
 
+  listWithBalances(): AssetWithBalance[] {
+    const rows = this.db
+      .prepare(
+        `
+        WITH asset_balances AS (
+          SELECT
+            asset_id,
+            COALESCE(SUM(money_delta_minor), 0) AS money_balance_minor,
+            COALESCE(SUM(quantity_delta_minor), 0) AS quantity_balance_minor
+          FROM fund_event_line
+          WHERE asset_id IS NOT NULL
+          GROUP BY asset_id
+        )
+        SELECT
+          base.*,
+          COALESCE(ab.money_balance_minor, 0) AS money_balance_minor,
+          COALESCE(ab.quantity_balance_minor, 0) AS quantity_balance_minor
+        FROM (
+          ${this.joinedSelect}
+        ) base
+        LEFT JOIN asset_balances ab ON ab.asset_id = base.asset_id
+        ORDER BY base.name COLLATE NOCASE
+      `
+      )
+      .all() as DbAssetWithBalanceJoinedRow[];
+
+    return rows.map(mapAssetWithBalance);
+  }
+
   listByFund(fundId: string): Asset[] {
     const rows = this.db
       .prepare(
@@ -47,6 +81,20 @@ export class AssetsRepo {
       `
       )
       .all(fundId) as DbAssetJoinedRow[];
+
+    return rows.map(mapAsset);
+  }
+
+  listByFundAndAccount(fundId: string, accountId: string): Asset[] {
+    const rows = this.db
+      .prepare(
+        `
+        ${this.joinedSelect}
+        WHERE a.fund_id = ? AND a.account_id = ?
+        ORDER BY a.name COLLATE NOCASE
+      `
+      )
+      .all(fundId, accountId) as DbAssetJoinedRow[];
 
     return rows.map(mapAsset);
   }
@@ -70,7 +118,7 @@ export class AssetsRepo {
    * - Update: preserves created_at, bumps updated_at to now.
    * - If assetType changes, removes old subtype row(s) and writes the new subtype.
    */
-  upsert(input: Asset): Asset {
+  upsert(input: AssetUpsertInput): Asset {
     const id = input.assetId?.trim() ? input.assetId : newId();
     const ts = nowIso();
 
@@ -126,59 +174,55 @@ export class AssetsRepo {
         maturity_date = excluded.maturity_date
     `);
 
-    const tx = this.db.transaction(() => {
-      const existing = getExisting.get(id) as ExistingAssetRow | undefined;
+    const existing = getExisting.get(id) as ExistingAssetRow | undefined;
 
-      if (!existing) {
-        const r = insertBase.run(
-          id,
-          input.fundId,
-          input.accountId,
-          input.name,
-          input.description ?? null,
-          input.assetType,
-          ts,
-          ts
-        );
-        assertChanges(r, "Failed to insert asset");
-      } else {
-        // If type changes, clear old subtype row(s) first.
-        if (existing.asset_type !== input.assetType) {
-          deleteCash.run(id);
-          deleteStock.run(id);
-          deleteNote.run(id);
-        }
-
-        updateBase.run(
-          input.fundId,
-          input.accountId,
-          input.name,
-          input.description ?? null,
-          input.assetType,
-          ts,
-          id
-        );
+    if (!existing) {
+      const r = insertBase.run(
+        id,
+        input.fundId,
+        input.accountId,
+        input.name,
+        input.description ?? null,
+        input.assetType,
+        ts,
+        ts
+      );
+      assertChanges(r, "Failed to insert asset");
+    } else {
+      if (existing.asset_type !== input.assetType) {
+        deleteCash.run(id);
+        deleteStock.run(id);
+        deleteNote.run(id);
       }
 
-      // Write subtype row based on current type
-      if (input.assetType === "CASH") {
-        upsertCash.run(id, input.currencyCode);
-      } else if (input.assetType === "STOCK") {
-        upsertStock.run(id, input.ticker);
-      } else {
-        upsertNote.run(
-          id,
-          input.counterparty ?? null,
-          input.interestRate,
-          input.startDate ?? null,
-          input.maturityDate ?? null
-        );
-      }
-    });
+      updateBase.run(
+        input.fundId,
+        input.accountId,
+        input.name,
+        input.description ?? null,
+        input.assetType,
+        ts,
+        id
+      );
+    }
 
-    tx();
-    return this.getById(id)!;
-  }
+    if (input.assetType === "CASH") {
+      upsertCash.run(id, input.currencyCode);
+    } else if (input.assetType === "STOCK") {
+      upsertStock.run(id, input.ticker);
+    } else {
+      upsertNote.run(
+        id,
+        input.counterparty ?? null,
+        input.interestRate,
+        input.startDate ?? null,
+        input.maturityDate ?? null
+      );
+    }
+
+  return this.getById(id)!;
+}
+
 
   delete(assetId: string): void {
     // CASCADE will remove subtype rows (cash/stocks/notes).

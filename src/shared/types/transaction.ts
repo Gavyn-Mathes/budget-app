@@ -1,16 +1,6 @@
 // shared/types/transaction.ts
-import type { Id, Money, IsoDate, IsoTimestamp } from "./common";
-import type { CategoryId } from "./category";
+import type { TransactionDTO, TransactionUpsertInputDTO } from "../schemas/transaction";
 
-export type TransactionId = Id;
-
-export interface Transaction {
-  transactionId: TransactionId;
-  categoryId: CategoryId;
-  date: IsoDate;           // "YYYY-MM-DD"
-  amount: Money;           // >= 0
-  notes: string | null;
-
-  createdAt: IsoTimestamp;
-  updatedAt: IsoTimestamp;
-}
+export type TransactionId = TransactionDTO["transactionId"];
+export type Transaction = TransactionDTO;
+export type TransactionUpsertInput = TransactionUpsertInputDTO;

@@ -2,20 +2,38 @@
 import { z } from "zod";
 import { IdSchema, MoneySchema, IsoTimestampSchema } from "./common";
 
-const BudgetLineBase = z.object({
+const StoredBase = z.object({
   budgetId: IdSchema,
   categoryId: IdSchema,
   createdAt: IsoTimestampSchema,
   updatedAt: IsoTimestampSchema,
 });
 
+const UpsertBase = z.object({
+  budgetId: IdSchema,
+  categoryId: IdSchema,
+});
+
 export const BudgetLineSchema = z.discriminatedUnion("allocationType", [
-  BudgetLineBase.extend({
+  StoredBase.extend({
     allocationType: z.literal("FIXED"),
     fixedAmount: MoneySchema.nonnegative(),
     percent: z.null(),
   }),
-  BudgetLineBase.extend({
+  StoredBase.extend({
+    allocationType: z.literal("PERCENT"),
+    fixedAmount: z.null(),
+    percent: z.number().min(0).max(1),
+  }),
+]);
+
+export const BudgetLineUpsertInputSchema = z.discriminatedUnion("allocationType", [
+  UpsertBase.extend({
+    allocationType: z.literal("FIXED"),
+    fixedAmount: MoneySchema.nonnegative(),
+    percent: z.null(),
+  }),
+  UpsertBase.extend({
     allocationType: z.literal("PERCENT"),
     fixedAmount: z.null(),
     percent: z.number().min(0).max(1),
@@ -23,3 +41,4 @@ export const BudgetLineSchema = z.discriminatedUnion("allocationType", [
 ]);
 
 export type BudgetLineDTO = z.infer<typeof BudgetLineSchema>;
+export type BudgetLineUpsertInputDTO = z.infer<typeof BudgetLineUpsertInputSchema>;

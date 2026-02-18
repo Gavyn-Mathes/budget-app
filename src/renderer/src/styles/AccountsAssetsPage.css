@@ -1,0 +1,196 @@
+/* src/renderer/src/styles/AccountsAssetsPage.css */
+
+.accountAssetsPage {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.accountAssetsPage__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.accountAssetsPage__title {
+  margin: 0;
+}
+
+.accountAssetsPage__subtitle {
+  opacity: 0.8;
+}
+
+.accountAssetsPage__filters {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.accountAssetsPage__field {
+  display: grid;
+  gap: 6px;
+}
+
+.accountAssetsPage__label {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.accountAssetsPage__input {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+}
+
+.accountAssetsPage__error {
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 0, 0, 0.35);
+  background: rgba(255, 0, 0, 0.08);
+  border-radius: 10px;
+}
+
+.accountAssetsPage__tableWrap {
+  overflow: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.accountAssetsPage__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.accountAssetsPage__table th,
+.accountAssetsPage__table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  vertical-align: top;
+}
+
+.accountAssetsPage__num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.accountAssetsPage__muted {
+  opacity: 0.75;
+  padding: 14px 12px;
+}
+
+.accountAssetsPage__notes {
+  max-width: 360px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.accountAssetsPage__groups {
+  display: grid;
+  gap: 16px;
+}
+
+.accountAssetsPage__group {
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  display: grid;
+  gap: 12px;
+}
+
+.accountAssetsPage__groupHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.accountAssetsPage__groupTitle {
+  font-weight: 700;
+}
+
+/* Transfer card */
+
+.accountAssetsTransfer {
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  display: grid;
+  gap: 12px;
+}
+
+.accountAssetsTransfer__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.accountAssetsTransfer__title {
+  font-weight: 700;
+}
+
+.accountAssetsTransfer__subtitle {
+  opacity: 0.8;
+}
+
+.accountAssetsTransfer__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.accountAssetsTransfer__field {
+  display: grid;
+  gap: 6px;
+}
+
+.accountAssetsTransfer__field--full {
+  grid-column: 1 / -1;
+}
+
+.accountAssetsTransfer__label {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.accountAssetsTransfer__input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+}
+
+.accountAssetsTransfer textarea.accountAssetsTransfer__input {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.accountAssetsTransfer__input[type="date"] {
+  color-scheme: dark;
+}
+
+.accountAssetsTransfer__hint {
+  opacity: 0.75;
+  font-size: 0.85rem;
+}
+
+.accountAssetsTransfer__error {
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 0, 0, 0.35);
+  background: rgba(255, 0, 0, 0.08);
+  border-radius: 10px;
+}
+
+.accountAssetsTransfer__success {
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 200, 120, 0.35);
+  background: rgba(0, 200, 120, 0.12);
+  border-radius: 10px;
+}

@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS fund_event (
   updated_at    TEXT NOT NULL,      -- ISO timestamp
 
 
+  FOREIGN KEY (event_type_id) REFERENCES event_types(event_type_id) ON UPDATE CASCADE ON DELETE RESTRICT,
   -- Enforce 'YYYY-MM-DD'
   CHECK (
     length(event_date) = 10 AND

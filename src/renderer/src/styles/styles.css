@@ -1,0 +1,37 @@
+/* renderer/src/styles/styles.css */
+:root {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #0b0c10;
+  color: #e6edf3;
+}
+
+a {
+  color: inherit;
+}
+
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.card {
+  background: #12141a;
+  border: 1px solid #232733;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.spacer {
+  height: 16px;
+}

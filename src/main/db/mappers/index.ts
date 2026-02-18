@@ -13,5 +13,6 @@ export * from "./fund_events.mapper";
 export * from "./fund_event_lines.mapper";
 export * from "./funds.mapper";
 export * from "./incomes.mapper";
+export * from "./liability_account_moves.mapper";
 export * from "./liabilities.mapper";
 export * from "./transactions.mapper";

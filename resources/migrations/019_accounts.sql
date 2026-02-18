@@ -4,7 +4,7 @@ PRAGMA foreign_keys = ON;
 
 CREATE TABLE IF NOT EXISTS accounts (
   account_id            TEXT PRIMARY KEY,  -- UUID/ULID
-  name                  TEXT NOT NULL UNIQUE,
+  name                  TEXT NOT NULL,
   account_type_id       TEXT NOT NULL,      -- FK -> account_types.account_type_id
   default_currency_code TEXT NOT NULL,      -- required default like 'USD'
   description           TEXT,
@@ -18,6 +18,8 @@ CREATE TABLE IF NOT EXISTS accounts (
     length(default_currency_code) = 3 AND
     default_currency_code GLOB '[A-Z][A-Z][A-Z]'
   ),
+
+  UNIQUE(name, account_type_id),
 
   FOREIGN KEY (account_type_id)
     REFERENCES account_types(account_type_id)

@@ -1,6 +1,6 @@
 // main/db/repos/event_types.repo.ts
 import Database from "better-sqlite3";
-import type { EventType } from "../../../shared/types/event_type";
+import type { EventType, EventTypeEditable } from "../../../shared/types/event_type";
 import { mapEventType, type DbEventTypeRow } from "../mappers/event_types.mapper";
 import { nowIso, newId, assertChanges } from "../mappers/common";
 
@@ -35,7 +35,21 @@ export class EventTypesRepo {
     return row ? mapEventType(row) : null;
   }
 
-  create(eventType: string): EventType {
+  getByName(eventType: string): EventType | null {
+    const row = this.db
+      .prepare(
+        `
+        SELECT event_type_id, event_type, created_at, updated_at
+        FROM event_types
+        WHERE event_type = ?
+      `
+      )
+      .get(eventType) as DbEventTypeRow | undefined;
+
+    return row ? mapEventType(row) : null;
+  }
+
+  create(eventType: EventTypeEditable): EventType {
     const id = newId();
     const ts = nowIso();
 
@@ -46,13 +60,13 @@ export class EventTypesRepo {
         VALUES (?, ?, ?, ?)
       `
       )
-      .run(id, eventType, ts, ts);
+      .run(id, eventType.eventType, ts, ts);
 
     assertChanges(result, "Failed to insert event_type");
     return this.getById(id)!;
   }
 
-  update(eventTypeId: string, eventType: string): EventType {
+  update(eventTypeId: string, eventType: EventTypeEditable): EventType {
     const existing = this.getById(eventTypeId);
     if (!existing) throw new Error(`EventType not found: ${eventTypeId}`);
 
@@ -66,7 +80,7 @@ export class EventTypesRepo {
         WHERE event_type_id = ?
       `
       )
-      .run(eventType, ts, eventTypeId);
+      .run(eventType.eventType, ts, eventTypeId);
 
     assertChanges(result, "Failed to update event_type");
     return this.getById(eventTypeId)!;
@@ -77,4 +91,3 @@ export class EventTypesRepo {
     assertChanges(result, `EventType not found (delete): ${eventTypeId}`);
   }
 }
-``

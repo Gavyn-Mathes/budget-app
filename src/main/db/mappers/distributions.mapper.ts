@@ -9,6 +9,7 @@ export type DbDistributionRow = {
   category_id: string | null;
 
   fund_id: string;
+  asset_id: string | null;
 
   allocation_type: "FIXED" | "PERCENT";
   fixed_amount: number | null;
@@ -23,6 +24,7 @@ export function mapDistributionRule(row: DbDistributionRow): DistributionRule {
     distributionRuleId: row.distribution_rule_id,
     budgetId: row.budget_id,
     fundId: row.fund_id,
+    assetId: row.asset_id,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   } as const;
@@ -43,7 +45,7 @@ export function mapDistributionRule(row: DbDistributionRow): DistributionRule {
           if (row.fixed_amount === null || row.percent !== null) {
             throw new Error(`Invalid FIXED allocation for distribution_rule_id=${row.distribution_rule_id}`);
           }
-          return { allocationType: "FIXED", fixedAmount: row.fixed_amount as any, percent: null } as const;
+          return { allocationType: "FIXED", fixedAmount: row.fixed_amount, percent: null } as const;
         })()
       : (() => {
           if (row.percent === null || row.fixed_amount !== null) {

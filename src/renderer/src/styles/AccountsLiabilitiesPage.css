@@ -1,0 +1,186 @@
+/* src/renderer/src/styles/AccountsLiabilitiesPage.css */
+
+.accountLiabilitiesPage {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.accountLiabilitiesPage__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.accountLiabilitiesPage__title {
+  margin: 0;
+}
+
+.accountLiabilitiesPage__subtitle {
+  opacity: 0.8;
+}
+
+.accountLiabilitiesPage__filters {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.accountLiabilitiesPage__field {
+  display: grid;
+  gap: 6px;
+}
+
+.accountLiabilitiesPage__label {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.accountLiabilitiesPage__input {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+}
+
+.accountLiabilitiesPage__error {
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 0, 0, 0.35);
+  background: rgba(255, 0, 0, 0.08);
+  border-radius: 10px;
+}
+
+.accountLiabilitiesPage__tableWrap {
+  overflow: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.accountLiabilitiesPage__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.accountLiabilitiesPage__table th,
+.accountLiabilitiesPage__table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  vertical-align: top;
+}
+
+.accountLiabilitiesPage__num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.accountLiabilitiesPage__muted {
+  opacity: 0.75;
+  padding: 14px 12px;
+}
+
+.accountLiabilitiesPage__notes {
+  max-width: 360px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.accountLiabilitiesPage__groups {
+  display: grid;
+  gap: 16px;
+}
+
+.accountLiabilitiesPage__group {
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  display: grid;
+  gap: 12px;
+}
+
+.accountLiabilitiesPage__groupHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.accountLiabilitiesPage__groupTitle {
+  font-weight: 700;
+}
+
+/* Transfer card */
+
+.accountLiabilitiesTransfer {
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  display: grid;
+  gap: 12px;
+}
+
+.accountLiabilitiesTransfer__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.accountLiabilitiesTransfer__title {
+  font-weight: 700;
+}
+
+.accountLiabilitiesTransfer__subtitle {
+  opacity: 0.8;
+}
+
+.accountLiabilitiesTransfer__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.accountLiabilitiesTransfer__field {
+  display: grid;
+  gap: 6px;
+}
+
+.accountLiabilitiesTransfer__field--full {
+  grid-column: 1 / -1;
+}
+
+.accountLiabilitiesTransfer__label {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.accountLiabilitiesTransfer__input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+}
+
+.accountLiabilitiesTransfer__input[type="date"] {
+  color-scheme: dark;
+}
+
+.accountLiabilitiesTransfer__error {
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 0, 0, 0.35);
+  background: rgba(255, 0, 0, 0.08);
+  border-radius: 10px;
+}
+
+.accountLiabilitiesTransfer__success {
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 200, 120, 0.35);
+  background: rgba(0, 200, 120, 0.12);
+  border-radius: 10px;
+}

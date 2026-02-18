@@ -10,8 +10,9 @@ function ensureDir(dir: string): string {
 
 /**
  * DB path:
- * - default: Electron userData (correct for packaged)
- * - dev override: BUDGET_DB_PATH or BUDGET_DB_DIR
+ * - explicit override: BUDGET_DB_PATH or BUDGET_DB_DIR
+ * - packaged default: Electron userData (writable install-safe location)
+ * - dev default: repo data folder
  */
 export function resolveDbPath(): string {
   const explicit = process.env.BUDGET_DB_PATH;
@@ -26,8 +27,13 @@ export function resolveDbPath(): string {
     return path.join(dirOverride, "budget.db");
   }
 
-  const dir = ensureDir(path.join(app.getPath("userData"), "data"));
-  return path.join(dir, "budget.db");
+  if (app.isPackaged) {
+    const userDataDir = ensureDir(app.getPath("userData"));
+    return path.join(userDataDir, "budget.db");
+  }
+
+  const dataDir = ensureDir(path.join(process.cwd(), "data"));
+  return path.join(dataDir, "budget.db");
 }
 
 /**

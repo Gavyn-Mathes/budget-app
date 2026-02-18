@@ -1,6 +1,6 @@
 // main/db/repos/budget_lines.repo.ts
 import Database from "better-sqlite3";
-import type { BudgetLine } from "../../../shared/types/budget_line";
+import type { BudgetLine, BudgetLineUpsertInput } from "../../../shared/types/budget_line";
 import { mapBudgetLine, type DbBudgetLineRow } from "../mappers/budget_lines.mapper";
 import { nowIso } from "../mappers/common";
 
@@ -31,58 +31,59 @@ export class BudgetLinesRepo {
    * - If a line exists, preserve created_at and update updated_at.
    * - Ensures budgetId on every line matches the request budgetId.
    */
-  upsertMany(budgetId: string, lines: BudgetLine[]): void {
-    const getCreatedAt = this.db.prepare(`
-      SELECT created_at
-      FROM budget_lines
-      WHERE budget_id = ? AND category_id = ?
-    `);
+  upsertMany(budgetId: string, lines: BudgetLineUpsertInput[]): void {
+  const getCreatedAt = this.db.prepare(`
+    SELECT created_at
+    FROM budget_lines
+    WHERE budget_id = ? AND category_id = ?
+  `);
 
-    const upsert = this.db.prepare(`
-      INSERT INTO budget_lines (
-        budget_id, category_id, allocation_type,
-        fixed_amount, percent,
-        created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?)
-      ON CONFLICT(budget_id, category_id) DO UPDATE SET
-        allocation_type = excluded.allocation_type,
-        fixed_amount    = excluded.fixed_amount,
-        percent         = excluded.percent,
-        updated_at      = excluded.updated_at
-    `);
+  const upsert = this.db.prepare(`
+    INSERT INTO budget_lines (
+      budget_id, category_id, allocation_type,
+      fixed_amount, percent,
+      created_at, updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?)
+    ON CONFLICT(budget_id, category_id) DO UPDATE SET
+      allocation_type = excluded.allocation_type,
+      fixed_amount    = excluded.fixed_amount,
+      percent         = excluded.percent,
+      updated_at      = excluded.updated_at
+  `);
 
-    const tx = this.db.transaction(() => {
-      const ts = nowIso();
+  const ts = nowIso();
 
-      for (const line of lines) {
-        if (line.budgetId !== budgetId) {
-          throw new Error(
-            `BudgetLinesRepo.upsertMany: line.budgetId (${line.budgetId}) does not match budgetId (${budgetId})`
-          );
-        }
+  for (const line of lines) {
+    if (line.budgetId !== budgetId) {
+      throw new Error(
+        `BudgetLinesRepo.upsertMany: line.budgetId (${line.budgetId}) does not match budgetId (${budgetId})`
+      );
+    }
 
-        const existing = getCreatedAt.get(budgetId, line.categoryId) as { created_at: string } | undefined;
-        const createdAt = existing?.created_at ?? ts;
+    const existing = getCreatedAt.get(budgetId, line.categoryId) as
+      | { created_at: string }
+      | undefined;
 
-        const fixedAmount =
-          line.allocationType === "FIXED" ? (line.fixedAmount as any as number) : null;
-        const percent =
-          line.allocationType === "PERCENT" ? line.percent : null;
+    const createdAt = existing?.created_at ?? ts;
 
-        upsert.run(
-          budgetId,
-          line.categoryId,
-          line.allocationType,
-          fixedAmount,
-          percent,
-          createdAt,
-          ts
-        );
-      }
-    });
+    const fixedAmount =
+      line.allocationType === "FIXED" ? (line.fixedAmount as any as number) : null;
 
-    tx();
+    const percent =
+      line.allocationType === "PERCENT" ? line.percent : null;
+
+    upsert.run(
+      budgetId,
+      line.categoryId,
+      line.allocationType,
+      fixedAmount,
+      percent,
+      createdAt,
+      ts
+    );
   }
+}
+
 
   deleteOne(budgetId: string, categoryId: string): void {
     // Caller expects ok:true regardless? Your IPC says ok:true,

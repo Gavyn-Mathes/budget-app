@@ -1,41 +1,23 @@
 // shared/types/asset.ts
-import type { Id, IsoTimestamp, IsoDate, CurrencyCode } from "./common";
-import type { FundId } from "./fund";
-import type { AccountId } from "./account";
-import type { AssetType } from "../constants/asset";
+import type { AssetDTO, AssetUpsertInputDTO, AssetWithBalanceDTO } from "../schemas/asset";
 
-export type AssetId = Id;
+export type Asset = AssetDTO;
+export type AssetUpsertInput = AssetUpsertInputDTO;
+export type AssetWithBalance = AssetWithBalanceDTO;
+export type AssetId = AssetDTO["assetId"];
 
-type AssetBase = {
-  assetId: AssetId;
-  fundId: FundId;
-  accountId: AccountId;
+export type CashAsset = Extract<Asset, { assetType: "CASH" }>;
+export type StockAsset = Extract<Asset, { assetType: "STOCK" }>;
+export type NoteAsset = Extract<Asset, { assetType: "NOTE" }>;
 
-  name: string;
-  description: string | null;
+export function isCashAsset(asset: Asset): asset is CashAsset {
+  return asset.assetType === "CASH";
+}
 
-  createdAt: IsoTimestamp;
-  updatedAt: IsoTimestamp;
+export function isStockAsset(asset: Asset): asset is StockAsset {
+  return asset.assetType === "STOCK";
+}
 
-  assetType: AssetType;
-};
-
-export type CashAsset = AssetBase & {
-  assetType: "CASH";
-  currencyCode: CurrencyCode;
-};
-
-export type StockAsset = AssetBase & {
-  assetType: "STOCK";
-  ticker: string; 
-};
-
-export type NoteAsset = AssetBase & {
-  assetType: "NOTE";
-  counterparty: string | null;
-  interestRate: number;
-  startDate: IsoDate | null;
-  maturityDate: IsoDate | null;
-};
-
-export type Asset = CashAsset | StockAsset | NoteAsset;
+export function isNoteAsset(asset: Asset): asset is NoteAsset {
+  return asset.assetType === "NOTE";
+}

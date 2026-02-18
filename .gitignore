@@ -1,6 +1,6 @@
 # ---- Budget app local runtime data ----
-data/
-budget-app-database.csv
+/data/
+/budget-app-database.csv
 # (or if you prefer only the contents)
 # data/**
 
@@ -17,7 +17,6 @@ release/
 
 # ---- Electron tooling caches ----
 .electron-vite/
-electron.vite.config.js
 
 
 # Logs

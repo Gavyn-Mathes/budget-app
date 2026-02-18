@@ -1,0 +1,57 @@
+/* src/renderer/src/styles/AccountTypesPage.css */
+.accountTypesPage {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.accountTypesPage__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.accountTypesPage__title {
+  margin: 0;
+}
+
+.accountTypesPage__subtitle {
+  opacity: 0.8;
+}
+
+.accountTypesPage__error {
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 0, 0, 0.35);
+  background: rgba(255, 0, 0, 0.08);
+  border-radius: 10px;
+}
+
+.accountTypesPage__tableWrap {
+  overflow: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.accountTypesPage__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.accountTypesPage__table th,
+.accountTypesPage__table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  vertical-align: top;
+}
+
+.accountTypesPage__muted {
+  opacity: 0.75;
+  padding: 14px 12px;
+}
+
+.accountTypesPage__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}

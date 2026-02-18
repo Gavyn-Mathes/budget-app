@@ -11,6 +11,8 @@ function sha256(s: string): string {
 }
 
 export function runMigrations(db: Database.Database, migrationsDir: string): void {
+  const allowChecksumRepair = process.env.BUDGET_MIGRATION_REPAIR_CHECKSUMS === "1";
+
   db.exec(`
     CREATE TABLE IF NOT EXISTS migrations (
       id         TEXT PRIMARY KEY,
@@ -29,6 +31,9 @@ export function runMigrations(db: Database.Database, migrationsDir: string): voi
     .sort();
 
   const insert = db.prepare("INSERT INTO migrations (id, checksum, applied_at) VALUES (?, ?, ?)");
+  const updateChecksum = db.prepare(
+    "UPDATE migrations SET checksum = ?, applied_at = ? WHERE id = ?"
+  );
   const tx = db.transaction(() => {
     for (const file of files) {
       const full = path.join(migrationsDir, file);
@@ -39,10 +44,17 @@ export function runMigrations(db: Database.Database, migrationsDir: string): voi
       if (already) {
         // If someone changed an already-applied migration, fail fast.
         if (already !== checksum) {
-          throw new Error(
-            `Migration checksum mismatch for ${file}. ` +
-            `It was applied before but the file contents changed.`
-          );
+          if (!allowChecksumRepair) {
+            throw new Error(
+              `Migration checksum mismatch for ${file}. ` +
+                `It was applied before but the file contents changed. ` +
+                `If this change is intentional, run once with BUDGET_MIGRATION_REPAIR_CHECKSUMS=1 ` +
+                `to update stored checksums.`
+            );
+          }
+
+          updateChecksum.run(checksum, new Date().toISOString(), file);
+          applied.set(file, checksum);
         }
         continue;
       }

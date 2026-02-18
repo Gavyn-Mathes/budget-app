@@ -1,5 +1,5 @@
 // preload/api/liabilities.api.ts
 import * as Shared from "../../shared/ipc/liabilities";
-import { makeZodApiModule } from "./common";
+import { makeApiModule } from "./common";
 
-export const liabilitiesApi = makeZodApiModule(Shared);
+export const liabilitiesApi = makeApiModule(Shared);

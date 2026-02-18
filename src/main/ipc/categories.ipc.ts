@@ -1,8 +1,23 @@
 // src/main/ipc/categories.ipc.ts
+
 import * as Shared from "../../shared/ipc/categories";
-import * as RepoModule from "../db/repos/categories.repo";
-import { registerZodRepoIpc } from "./common";
+import { registerZodIpc } from "./common";
+import { getDb } from "../db";
+import { CategoriesRepo } from "../db/repos/categories.repo";
+import { CategoriesService } from "../services/categories.service";
 
 export function registerCategoriesIpc() {
-  registerZodRepoIpc({ namespace: "categories", shared: Shared, repoModule: RepoModule });
+  const db = getDb();
+  const repo = new CategoriesRepo(db);
+  const service = new CategoriesService(db, repo);
+
+  registerZodIpc({
+    namespace: "categories",
+    shared: Shared,
+    impl: service,
+    responseMap: {
+      Upsert: (category) => ({ ok: true, category }),
+      Delete: () => ({ ok: true }),
+    },
+  });
 }

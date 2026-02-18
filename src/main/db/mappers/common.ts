@@ -1,5 +1,6 @@
 // main/db/mappers/common.ts
 import crypto from "crypto";
+import type { Money } from "../../../shared/types/common";
 
 export type ISODate = string;
 export type ID = string;

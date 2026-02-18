@@ -1,0 +1,44 @@
+/* src/renderer/src/styles/FundEventsHomePage.css */
+.fundEventsHome {
+  padding: 24px;
+}
+
+.fundEventsHome__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.fundEventsHome__title {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.fundEventsHome__subtitle {
+  margin-top: 6px;
+  opacity: 0.75;
+  font-size: 14px;
+}
+
+.fundEventsHome__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+@media (max-width: 900px) {
+  .fundEventsHome {
+    padding: 18px;
+  }
+  .fundEventsHome__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .fundEventsHome__grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,8 @@
+/* renderer/src/styles/theme.css */
+:root {
+  --bg: #ffffff;
+  --fg: #111827;
+  --border: rgba(0,0,0,0.12);
+  --radius: 12px;
+  --pad: 14px;
+}

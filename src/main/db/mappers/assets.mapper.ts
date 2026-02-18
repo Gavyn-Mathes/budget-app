@@ -1,5 +1,5 @@
 // main/db/mappers/assets.mapper.ts
-import type { Asset } from "../../../shared/types/asset";
+import type { Asset, AssetWithBalance } from "../../../shared/types/asset";
 
 export type DbAssetJoinedRow = {
   // assets
@@ -23,6 +23,11 @@ export type DbAssetJoinedRow = {
   interest_rate: number | null;
   start_date: string | null;
   maturity_date: string | null;
+};
+
+export type DbAssetWithBalanceJoinedRow = DbAssetJoinedRow & {
+  money_balance_minor: number;
+  quantity_balance_minor: number;
 };
 
 export function mapAsset(row: DbAssetJoinedRow): Asset {
@@ -73,4 +78,12 @@ export function mapAsset(row: DbAssetJoinedRow): Asset {
     default:
       throw new Error(`Unknown asset_type ${(row as any).asset_type}`);
   }
+}
+
+export function mapAssetWithBalance(row: DbAssetWithBalanceJoinedRow): AssetWithBalance {
+  return {
+    ...mapAsset(row),
+    moneyBalanceMinor: row.money_balance_minor ?? 0,
+    quantityBalanceMinor: row.quantity_balance_minor ?? 0,
+  };
 }

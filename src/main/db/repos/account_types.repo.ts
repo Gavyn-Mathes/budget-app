@@ -1,6 +1,6 @@
 // main/db/repos/account_types.repo.ts
 import Database from "better-sqlite3";
-import type { AccountType } from "../../../shared/types/account_type";
+import type { AccountType, AccountTypeUpsertInput } from "../../../shared/types/account_type";
 import { mapAccountType, type DbAccountTypeRow } from "../mappers/account_types.mapper";
 import { nowIso, assertChanges, newId } from "../mappers/common";
 
@@ -40,7 +40,7 @@ export class AccountTypesRepo {
    * - If inserting: sets created_at/updated_at to now.
    * - If updating: preserves created_at, bumps updated_at to now.
    */
-  upsert(input: AccountType): AccountType {
+  upsert(input: AccountTypeUpsertInput): AccountType {
     const id = input.accountTypeId?.trim() ? input.accountTypeId : newId();
     const ts = nowIso();
 

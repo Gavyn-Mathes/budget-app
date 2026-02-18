@@ -1,0 +1,238 @@
+/* src/renderer/src/styles/BudgetsIncomesPage.css */
+
+.budgetsIncome {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.budgetsIncome__headerActions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.budgetsIncome__summaryRow {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+.budgetsIncome__monthPicker {
+  flex: 1 1 240px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.budgetsIncome__fieldLabel {
+  font-size: 12px;
+  opacity: 0.75;
+  margin-bottom: 6px;
+}
+
+.budgetsIncome__monthInput {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  outline: none;
+}
+
+.budgetsIncome__summaryCard {
+  flex: 2 1 320px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.budgetsIncome__summaryLabel {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.budgetsIncome__summaryValue {
+  margin-top: 6px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.budgetsIncome__summaryHint {
+  margin-top: 6px;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.budgetsIncome__panel {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.budgetsIncome__panelHeader {
+  margin-bottom: 12px;
+}
+
+.budgetsIncome__panelTitle {
+  font-weight: 700;
+}
+
+.budgetsIncome__panelSubtitle {
+  font-size: 13px;
+  opacity: 0.75;
+  margin-top: 4px;
+}
+
+.budgetsIncome__error {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 0, 0, 0.06);
+  margin-bottom: 10px;
+}
+
+.budgetsIncome__loading {
+  padding: 8px 2px;
+  opacity: 0.75;
+  margin-bottom: 8px;
+}
+
+.budgetsIncome__empty {
+  padding: 18px;
+  text-align: center;
+}
+
+.budgetsIncome__emptyTitle {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.budgetsIncome__emptySubtitle {
+  font-size: 13px;
+  opacity: 0.75;
+  margin-bottom: 12px;
+}
+
+/* Table */
+.incomesTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.incomesTable th,
+.incomesTable td {
+  padding: 10px 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  vertical-align: top;
+}
+
+.incomesTable thead th {
+  border-top: none;
+  font-size: 12px;
+  opacity: 0.75;
+  text-align: left;
+}
+
+.incomesTable__num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.incomesTable__actionsCol {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.incomesTable__rowActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* Dialog */
+.incomeDialog__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+.incomeDialog__panel {
+  width: min(520px, 100%);
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.incomeDialog__header {
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.incomeDialog__title {
+  font-weight: 700;
+}
+
+.incomeDialog__close {
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.incomeDialog__body {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.incomeDialog__label {
+  font-size: 12px;
+  opacity: 0.85;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.incomeDialog__input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  outline: none;
+}
+
+.incomeDialog__footer {
+  padding: 12px 14px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 900px) {
+  .budgetsIncome {
+    padding: 18px;
+  }
+  .incomesTable__rowActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 520px) {
+  .budgetsIncome {
+    padding: 14px;
+    gap: 14px;
+  }
+}

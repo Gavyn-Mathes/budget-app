@@ -1,11 +1,6 @@
 // shared/types/category.ts
-import type { Id, IsoTimestamp } from "./common";
+import type { CategoryDTO, CategoryUpsertInputDTO } from "../schemas/category";
 
-export type CategoryId = Id;
-
-export interface Category {
-  categoryId: CategoryId;
-  name: string;
-  createdAt: IsoTimestamp;
-  updatedAt: IsoTimestamp;
-}
+export type CategoryId = CategoryDTO["categoryId"];
+export type Category = CategoryDTO;
+export type CategoryUpsertInput = CategoryUpsertInputDTO;

@@ -1,7 +1,7 @@
 // main/db/repos/funds.repo.ts
 import Database from "better-sqlite3";
-import type { Fund } from "../../../shared/types/fund";
-import { mapFund, type DbFundRow } from "../mappers/funds.mapper";
+import type { Fund, FundUpsertInput } from "../../../shared/types/fund";
+import { mapFund, type DbFundRow, DbFundWithTotalsRow } from "../mappers/funds.mapper";
 import { nowIso, newId, assertChanges } from "../mappers/common";
 
 export class FundsRepo {
@@ -19,6 +19,40 @@ export class FundsRepo {
       .all() as DbFundRow[];
 
     return rows.map(mapFund);
+  }
+
+  listWithTotalsRows(): DbFundWithTotalsRow[] {
+    return this.db
+      .prepare(
+        `
+        WITH fund_lines AS (
+          SELECT a.fund_id AS fund_id, l.money_delta_minor AS money_delta_minor, 1 AS is_asset, 0 AS is_liability
+          FROM fund_event_line l
+          JOIN assets a ON a.asset_id = l.asset_id
+          WHERE l.asset_id IS NOT NULL
+
+          UNION ALL
+
+          SELECT li.fund_id AS fund_id, l.money_delta_minor AS money_delta_minor, 0 AS is_asset, 1 AS is_liability
+          FROM fund_event_line l
+          JOIN liability li ON li.liability_id = l.liability_id
+          WHERE l.liability_id IS NOT NULL
+        )
+        SELECT
+          f.fund_id,
+          f.name,
+          f.description,
+          f.created_at,
+          f.updated_at,
+          COALESCE(SUM(CASE WHEN fl.is_asset = 1 THEN fl.money_delta_minor ELSE 0 END), 0) AS assets_minor,
+          COALESCE(SUM(CASE WHEN fl.is_liability = 1 THEN fl.money_delta_minor ELSE 0 END), 0) AS liabilities_minor
+        FROM funds f
+        LEFT JOIN fund_lines fl ON fl.fund_id = f.fund_id
+        GROUP BY f.fund_id
+        ORDER BY f.name COLLATE NOCASE, f.fund_id
+        `
+      )
+      .all() as DbFundWithTotalsRow[];
   }
 
   getById(fundId: string): Fund | null {
@@ -42,7 +76,7 @@ export class FundsRepo {
    *
    * name is UNIQUE (ux_funds_name), so conflicting names will throw.
    */
-  upsert(input: Fund): Fund {
+  upsert(input: FundUpsertInput): Fund {
     const id = input.fundId?.trim() ? input.fundId : newId();
     const ts = nowIso();
 

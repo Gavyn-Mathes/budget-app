@@ -1,6 +1,5 @@
 // src/main/ipc/common.ts
 import { ipcMain } from "electron";
-import { getDb } from "../db";
 
 type AnyRecord = Record<string, any>;
 type IpcMap = Record<string, string>;
@@ -18,22 +17,15 @@ function lowerFirst(s: string) {
 }
 
 function toCamel(s: string) {
-  // snake_case / kebab-case -> camelCase
   return s
     .toLowerCase()
     .replace(/[-_]+([a-z0-9])/g, (_, c: string) => c.toUpperCase());
 }
 
 function deriveListKey(namespace: string) {
-  // e.g. "account_types" -> "accountTypes"
   return toCamel(namespace);
 }
 
-/**
- * Find the exported IPC map from shared module.
- * Expects something like:
- *   export const ACCOUNT_TYPES_IPC = { List: "...", Upsert: "...", ... } as const;
- */
 function pickIpcMap(shared: AnyRecord): IpcMap {
   for (const [k, v] of Object.entries(shared)) {
     if (!k.endsWith("_IPC")) continue;
@@ -45,21 +37,7 @@ function pickIpcMap(shared: AnyRecord): IpcMap {
   );
 }
 
-/**
- * Find an exported Repo class (e.g. AccountTypesRepo).
- */
-function pickRepoClass(repoModule: AnyRecord): new (db: any) => AnyRecord {
-  for (const [k, v] of Object.entries(repoModule)) {
-    if (!k.endsWith("Repo")) continue;
-    if (typeof v === "function" && v.prototype) return v as any;
-  }
-
-  throw new Error(
-    `Could not find Repo class export in repo module. Exports: ${Object.keys(repoModule).join(", ")}`
-  );
-}
-
-function isZodSchema(v: any): v is { parse: (x: any) => any; safeParse?: (x: any) => any } {
+function isZodSchema(v: any): v is { parse: (x: any) => any } {
   return !!v && typeof v.parse === "function";
 }
 
@@ -73,11 +51,7 @@ function pickSchema(shared: AnyRecord, name: string) {
   return v;
 }
 
-function unwrapReqToRepoArgs(req: AnyRecord): any[] {
-  // Common pattern in your shared IPC:
-  // - {} -> no args
-  // - { x: value } -> pass value
-  // - { a, b } -> pass whole object
+function unwrapReqToImplArgs(req: AnyRecord): any[] {
   const keys = isPlainObject(req) ? Object.keys(req) : [];
   if (keys.length === 0) return [];
   if (keys.length === 1) return [req[keys[0]]];
@@ -92,72 +66,82 @@ function buildResponse(opts: {
 }) {
   const { op, namespace, result, resSchema } = opts;
 
-  // 1) For List ops, if repo returns an array, wrap it in { <derivedKey>: [...] }
-  if (op === "List" && Array.isArray(result)) {
+  if (op.startsWith("List") && Array.isArray(result)) {
     const wrapped = { [deriveListKey(namespace)]: result };
     return resSchema.parse(wrapped);
   }
 
-  // 2) Try parsing the repo result directly (some ops may return full objects)
   try {
     return resSchema.parse(result);
   } catch {
     // ignore
   }
 
-  // 3) For Upsert/Delete style ops that often return void/object but response is { ok: true }
   try {
     return resSchema.parse({ ok: true });
   } catch {
     // ignore
   }
 
-  // 4) Last resort: if result is object, try parse it as-is
   if (isPlainObject(result)) return resSchema.parse(result);
 
-  // If none worked, throw with a helpful hint.
   throw new Error(
     `Could not build a valid response for ${namespace}.${op}. ` +
-      `Check that ${op}Res matches what the repo method returns (or expects {ok:true}).`
+      `Either align ${op}Res with what impl.${lowerFirst(op)} returns, or provide responseMap['${op}'].`
   );
 }
 
-export function registerZodRepoIpc(opts: {
-  namespace: string;     // e.g. "account_types"
-  shared: AnyRecord;     // shared/ipc/<table>.ts module namespace import
-  repoModule: AnyRecord; // main/db/repos/<table>.repo.ts module namespace import
-  methodMap?: Record<string, string>; // optional overrides: { Upsert: "upsertById" }
+/**
+ * impl-only IPC registrar (impl can be repo or service)
+ */
+export function registerZodIpc(opts: {
+  namespace: string;
+  shared: AnyRecord;
+  impl: AnyRecord;
+
+  methodMap?: Record<string, string>;
+  responseMap?: Record<string, (result: any, req: AnyRecord) => any>;
+  argMap?: Record<string, (req: AnyRecord) => any[]>;
 }) {
-  const { namespace, shared, repoModule, methodMap } = opts;
+  const { namespace, shared, impl, methodMap, responseMap, argMap } = opts;
 
   const ipcMap = pickIpcMap(shared);
-  const RepoClass = pickRepoClass(repoModule);
-
-  // Instantiate once
-  const repo = new RepoClass(getDb());
 
   for (const [op, channel] of Object.entries(ipcMap)) {
     const reqSchema = pickSchema(shared, `${op}Req`);
     const resSchema = pickSchema(shared, `${op}Res`);
 
     const methodName = methodMap?.[op] ?? lowerFirst(op);
-    const fn = (repo as any)[methodName];
+    const fn = (impl as any)[methodName];
 
     if (typeof fn !== "function") {
       throw new Error(
-        `Repo method not found for ${namespace}.${op}: expected repo.${methodName}(). ` +
-          `Repo methods: ${Object.getOwnPropertyNames(Object.getPrototypeOf(repo)).join(", ")}`
+        `Impl method not found for ${namespace}.${op}: expected impl.${methodName}(). ` +
+          `Impl methods: ${Object.getOwnPropertyNames(Object.getPrototypeOf(impl)).join(", ")}`
       );
     }
 
     ipcMain.handle(channel, async (_event, ...args) => {
-      const raw = args[0] ?? {};
-      const req = reqSchema.parse(raw);
+      try {
+        console.log(`[main][ipc] hit ${namespace}.${op} (${channel})`);
 
-      const repoArgs = unwrapReqToRepoArgs(req);
-      const result = await Promise.resolve(fn.apply(repo, repoArgs));
+        const raw = args[0] ?? {};
+        const req = reqSchema.parse(raw);
+        
+        const toArgs = argMap?.[op] ?? unwrapReqToImplArgs;
+        const implArgs = toArgs(req);
 
-      return buildResponse({ op, namespace, result, resSchema });
+        const result = await Promise.resolve(fn.apply(impl, implArgs));
+
+        const wrapper = responseMap?.[op];
+        if (wrapper) return resSchema.parse(wrapper(result, req));
+
+        return buildResponse({ op, namespace, result, resSchema });
+      } catch (e: any) {
+        console.error(`[main][ipc] ERROR ${namespace}.${op} (${channel})`, e);
+        console.error("[main][ipc] stack:", e?.stack);
+        throw e;
+      }
     });
   }
 }
