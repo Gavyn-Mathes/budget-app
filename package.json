@@ -11,10 +11,10 @@
     "start": "electron .",
     "dev": "electron-vite dev",
     "build": "electron-vite build",
-    "dist": "electron-builder",
-    "dist:win": "electron-builder --win nsis",
-    "dist:mac": "electron-builder --mac",
-    "dist:linux": "electron-builder --linux AppImage deb",
+    "dist": "electron-builder --publish never",
+    "dist:win": "electron-builder --win nsis --publish never",
+    "dist:mac": "electron-builder --mac --publish never",
+    "dist:linux": "electron-builder --linux AppImage deb --publish never",
     "quick-start": "electron-vite build && electron-vite .",
     "preview": "electron-vite preview",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -99,6 +99,7 @@
         "AppImage",
         "deb"
       ],
+      "maintainer": "Gavyn Mathes <gammamathes2003@gmail.com>",
       "category": "Office",
       "icon": "build/icons"
     }
