@@ -90,12 +90,12 @@ jobs:
           LINUX_GPG_PRIVATE_KEY: ${{ secrets.LINUX_GPG_PRIVATE_KEY }}
           LINUX_GPG_PASSPHRASE: ${{ secrets.LINUX_GPG_PASSPHRASE }}
         run: |
+          sha256sum dist/*.AppImage > dist/SHA256SUMS
           if [ -z "$LINUX_GPG_PRIVATE_KEY" ]; then
             echo "Skipping checksum signing: LINUX_GPG_PRIVATE_KEY is not set."
             exit 0
           fi
           echo "$LINUX_GPG_PRIVATE_KEY" | gpg --batch --import
-          sha256sum dist/*.AppImage > dist/SHA256SUMS
           gpg --batch --yes --pinentry-mode loopback \
             --passphrase "$LINUX_GPG_PASSPHRASE" \
             --armor --detach-sign dist/SHA256SUMS
@@ -164,9 +164,4 @@ jobs:
             release-assets/*.zip
             release-assets/*.blockmap
             release-assets/latest*.yml
-            release-assets/SHA256SUMS
-            release-assets/SHA256SUMS.asc
-            release-assets/budget-app-windows-latest.exe
-            release-assets/budget-app-macos-latest.dmg
-            release-assets/budget-app-linux-latest.AppImage
-            release-assets/budget-app-linux-latest.deb
+            release-assets/SHA256SUMS*
