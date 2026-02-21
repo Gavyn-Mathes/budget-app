@@ -135,6 +135,14 @@ See `docs/installer-signing.md` for details.
 
 Tagging a commit with `v*` triggers the matrix release workflow in `.github/workflows/release-installers.yml`, which builds Windows, macOS, and Linux installers and publishes them as GitHub release assets.
 
+Release sequence (keeps `main` aligned with released version):
+
+1. Merge release-ready changes to `main`.
+2. Push `main` to GitHub.
+3. Create a version tag from that commit (`v*`) and push the tag.
+
+The workflow now validates that a release tag points to a commit reachable from `origin/main`.
+
 ## Testing
 
 Automated tests are not configured yet (`npm test` currently exits with an error).

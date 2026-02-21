@@ -78,7 +78,10 @@
     "nsis": {
       "createDesktopShortcut": "always",
       "createStartMenuShortcut": true,
-      "shortcutName": "budget-app"
+      "shortcutName": "budget-app",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico"
     },
     "mac": {
       "target": [
