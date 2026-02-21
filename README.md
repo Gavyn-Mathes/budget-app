@@ -46,6 +46,13 @@ npm run dev
 
 This starts the app in development mode using `electron-vite`.
 
+## Download latest installers
+
+- Windows installer (`.exe`): [Download](https://github.com/Gavyn-Mathes/budget-app/releases/latest/download/budget-app-windows-latest.exe)
+- macOS installer (`.dmg`): [Download](https://github.com/Gavyn-Mathes/budget-app/releases/latest/download/budget-app-macos-latest.dmg)
+- Linux AppImage: [Download](https://github.com/Gavyn-Mathes/budget-app/releases/latest/download/budget-app-linux-latest.AppImage)
+- Linux Debian package (`.deb`): [Download](https://github.com/Gavyn-Mathes/budget-app/releases/latest/download/budget-app-linux-latest.deb)
+
 ## Available scripts
 
 - `npm run dev` - Start Electron + Vite in development mode

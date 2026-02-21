@@ -122,6 +122,35 @@ jobs:
           path: release-assets
           merge-multiple: true
 
+      - name: Create latest asset aliases
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+
+          for file in release-assets/*.exe; do
+            if [[ "$file" == *__uninstaller.exe ]]; then
+              continue
+            fi
+            cp "$file" release-assets/budget-app-windows-latest.exe
+            break
+          done
+
+          appimages=(release-assets/*.AppImage)
+          if [ ${#appimages[@]} -gt 0 ]; then
+            cp "${appimages[0]}" release-assets/budget-app-linux-latest.AppImage
+          fi
+
+          debs=(release-assets/*.deb)
+          if [ ${#debs[@]} -gt 0 ]; then
+            cp "${debs[0]}" release-assets/budget-app-linux-latest.deb
+          fi
+
+          dmgs=(release-assets/*.dmg)
+          if [ ${#dmgs[@]} -gt 0 ]; then
+            cp "${dmgs[0]}" release-assets/budget-app-macos-latest.dmg
+          fi
+
       - name: Create or update release
         uses: softprops/action-gh-release@v2
         with:
@@ -137,3 +166,7 @@ jobs:
             release-assets/latest*.yml
             release-assets/SHA256SUMS
             release-assets/SHA256SUMS.asc
+            release-assets/budget-app-windows-latest.exe
+            release-assets/budget-app-macos-latest.dmg
+            release-assets/budget-app-linux-latest.AppImage
+            release-assets/budget-app-linux-latest.deb
