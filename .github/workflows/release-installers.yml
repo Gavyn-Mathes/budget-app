@@ -33,7 +33,7 @@ jobs:
   build:
     name: Build (${{ matrix.target }})
     needs: verify-release-commit
-    if: github.event_name == 'workflow_dispatch' || needs.verify-release-commit.result == 'success'
+    if: github.event_name == 'workflow_dispatch' || needs['verify-release-commit'].result == 'success'
     runs-on: ${{ matrix.os }}
     env:
       CSC_IDENTITY_AUTO_DISCOVERY: "false"
@@ -84,12 +84,16 @@ jobs:
         run: ${{ matrix.dist_command }}
 
       - name: Sign Linux checksums (optional)
-        if: matrix.target == 'linux' && secrets.LINUX_GPG_PRIVATE_KEY != ''
+        if: matrix.target == 'linux'
         shell: bash
         env:
           LINUX_GPG_PRIVATE_KEY: ${{ secrets.LINUX_GPG_PRIVATE_KEY }}
           LINUX_GPG_PASSPHRASE: ${{ secrets.LINUX_GPG_PASSPHRASE }}
         run: |
+          if [ -z "$LINUX_GPG_PRIVATE_KEY" ]; then
+            echo "Skipping checksum signing: LINUX_GPG_PRIVATE_KEY is not set."
+            exit 0
+          fi
           echo "$LINUX_GPG_PRIVATE_KEY" | gpg --batch --import
           sha256sum dist/*.AppImage > dist/SHA256SUMS
           gpg --batch --yes --pinentry-mode loopback \
